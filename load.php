@@ -12,4 +12,4 @@ $userhistory = isset($_COOKIE[config("cookie") . "_history"]) ? clean(mysqli_rea
 
 // Include default files
 require("languages/default/$userlang.def.php");
-if (file_exists("languages/default/$userlang.cus.php")) require("languages/default/$userlang.cus.php");
+if (file_exists("languages/custom/$userlang.cus.php")) require("languages/custom/$userlang.cus.php");
