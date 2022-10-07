@@ -1,0 +1,10 @@
+Options +FollowSymLinks
+RewriteEngine On
+Options -Indexes
+
+RewriteRule ^/?$ ./handler/home.php
+RewriteRule ^home/?$ ./handler/home.php
+RewriteRule ^error/?$ ./handler/error.php
+
+ErrorDocument 404 /handler/error.php
+ErrorDocument 403 /handler/error.php
