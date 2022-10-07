@@ -4,6 +4,10 @@ Options -Indexes
 
 RewriteRule ^/?$ ./handler/home.php
 RewriteRule ^home/?$ ./handler/home.php
+
+# Titles stuff
+RewriteRule ^title/([0-9]*)/?([a-z0-9-]*)/?$ ./handler/title.php?id=$1
+
 RewriteRule ^error/?$ ./handler/error.php
 
 ErrorDocument 404 /handler/error.php

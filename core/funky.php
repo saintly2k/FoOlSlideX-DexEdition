@@ -40,6 +40,7 @@ function callFile($file)
 
 function cat($title)
 {
+    // This function is used, to make all titles readable for the URL and links
     $title = str_replace("&", "et", str_replace(' ', '-', strtolower($title)));
     return preg_replace('/[^A-Za-z0-9\-]/', '', $title);
 }
@@ -53,4 +54,22 @@ function shorten($text, $maxlength = 25)
         $text = substr($text, 0, $maxlength) . "...";
     }
     return $text;
+}
+
+function convertWork($n)
+{
+    // This function is used to output the status of a title's original work status
+    if ($n == 1) $out = "Publishing";
+    if ($n == 2) $out = "Hiatus";
+    if ($n == 3) $out = "Completed";
+    return $out;
+}
+
+function convertUpload($n)
+{
+    // This function is used to output the status of a title's upload status
+    if ($n == 1) $out = "Uploading";
+    if ($n == 2) $out = "Paused";
+    if ($n == 3) $out = "Completed";
+    return $out;
 }

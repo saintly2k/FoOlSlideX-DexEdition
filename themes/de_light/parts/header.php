@@ -11,7 +11,7 @@
     <?php if (config("tailwind_type") == "cdn") { ?>
         <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <?php } ?>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" type="text/javascript"></script>
     <link rel="icon" type="image/x-icon" href="<?= config("url") ?>data/assets/img/favicon.ico">
 
     <script type="text/javascript">
@@ -40,6 +40,19 @@
             }
             return xmlhttp;
         }
-        //HTTP Objects..
+        //HTTP Objects...
         let http = getHTTPObject();
+
+        function title(title) {
+            document.title = title + " - <?= config("title") ?>";
+        }
     </script>
+
+    <style>
+        .just {
+            hyphens: auto !important;
+            text-align: justify !important;
+            -webkit-hyphens: auto !important;
+            word-wrap: break-word !important;
+        }
+    </style>
