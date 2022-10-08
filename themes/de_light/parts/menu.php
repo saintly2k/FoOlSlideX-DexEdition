@@ -8,19 +8,19 @@
                 <div class="py-2">
                     <ul class="flex flex-row mt-0 mr-6 space-x-8 text-sm">
                         <li>
-                            <a href="<?= config("url") ?>publisher/home" class="text-white font-bold hover:underline">Publisher</a>
+                            <a href="<?= config("url") ?>publisher" class="text-white font-bold hover:underline">Publisher</a>
                         </li>
                         <li>
-                            <a href="<?= config("url") ?>publisher/my?tab=titles" class="text-white hover:underline">My Titles</a>
+                            <a href="<?= config("url") ?>publisher/my/titles" class="text-white hover:underline">My Titles</a>
                         </li>
                         <li>
-                            <a href="<?= config("url") ?>publisher/my?tab=groups" class="text-white hover:underline">My Groups</a>
+                            <a href="<?= config("url") ?>publisher/my/groups" class="text-white hover:underline">My Groups</a>
                         </li>
                         <li>
-                            <a href="<?= config("url") ?>publisher/new?type=title" class="text-white hover:underline">New Title</a>
+                            <a href="<?= config("url") ?>publisher/new/title" class="text-white hover:underline">New Title</a>
                         </li>
                         <li>
-                            <a href="<?= config("url") ?>publisher/new?type=group" class="text-white hover:underline">New Group</a>
+                            <a href="<?= config("url") ?>publisher/new/group" class="text-white hover:underline">New Group</a>
                         </li>
                     </ul>
                 </div>

@@ -9,6 +9,8 @@ RewriteRule ^home/?$ ./handler/home.php
 RewriteRule ^title/([0-9]*)/?([a-z0-9-_]*)/?$ ./handler/title.php?id=$1
 
 # Publisher stuff
+RewriteRule ^publisher/?$ ./handler/publisher.home.php
+RewriteRule ^publisher/home/?$ ./handler/publisher.home.php?tab=home
 RewriteRule ^publisher/title/([0-9]*)/?([a-z0-9-_]*)/?$ ./handler/publisher.title.php?id=$1
 
 # Account stuff
