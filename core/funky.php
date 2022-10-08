@@ -31,7 +31,7 @@ function callFile($file)
         http.open('GET', url, true);
         http.onreadystatechange = function() {
             if (http.readyState == 4) {
-                document.getElementById('content').innerHTML = http.responseText;
+                $('#content').html(http.responseText);
             }
         }
         http.send(null);
