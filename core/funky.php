@@ -27,7 +27,7 @@ function config($name)
 function callFile($file)
 {
     return "<script>function loadContent() {
-        url = '$file';
+        let url = '$file';
         http.open('GET', url, true);
         http.onreadystatechange = function() {
             if (http.readyState == 4) {

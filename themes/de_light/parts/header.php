@@ -16,6 +16,7 @@
     <?php if (config("captcha_enabled") == 1) { ?>
         <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
     <?php } ?>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js" type="text/javascript"></script>
 
     <script type="text/javascript">
         function getHTTPObject() {
