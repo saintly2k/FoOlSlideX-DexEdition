@@ -113,7 +113,10 @@ function tryCreateTitle($title, $cover, $alt, $authors, $artists, $genre, $langu
 {
     require("../core/config.php");
     require("../core/conn.php");
-    $sql = "INSERT INTO `titles`(`cover`, `title`, `alt_names`, `authors`, `artists`, `genre`, `original_language`, `original_work`, `upload_status`, `release_year`, `complete_year`, `summary`, `notes`, `user_id`) VALUES ('$cover','$title','$alt','$authors','$artists','$genre','$language','$origwork','$uplstatus','$release','$complete','$summary','$notes','$uid')";
+    $release = empty($release) ? "NULL" : "'$release'";
+    $complete = empty($complete) ? "NULL" : "'$complete'";
+    $sql = "INSERT INTO `titles`(`cover`, `title`, `alt_names`, `authors`, `artists`, `genre`, `original_language`, `original_work`, `upload_status`, `release_year`, `complete_year`, `summary`, `notes`, `user_id`)
+    VALUES ('$cover','$title','$alt','$authors','$artists','$genre','$language','$origwork','$uplstatus',$release,$complete,'$summary','$notes','$uid')";
     if (!$conn->query($sql)) {
         $out = "MySQL Error: " . $conn->error;
     } else {

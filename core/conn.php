@@ -9,5 +9,5 @@ if ($conn->connect_error) {
 }
 
 // If not, we can get our config :D
-$config = $conn->query("SELECT * FROM  `config` ORDER BY `id` ASC")->fetch_all(MYSQLI_ASSOC);
+$config = $conn->query("SELECT * FROM  `config` ORDER BY `id` ASC");
 

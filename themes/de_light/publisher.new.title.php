@@ -1,9 +1,3 @@
-<?php
-
-require("../load.php");
-
-?>
-
 <div class="col-span-12 text-center">
     <h1 class="text-3xl">Add new Title</h1>
     <h3 class="text-xl">You don't need to be the author.</h3>
@@ -35,57 +29,114 @@ require("../load.php");
         <div class="form-group mb-3">
             <label for="title" class="text-xl pl-5">Title <span class="text-gray-600">(Required)</span></label>
             <input required type="text" minlength="10" maxlength="100" id="title" name="title" class="w-full" placeholder="Title of Comic" value="<?= isset($_POST["title"]) ? clean(mysqli_real_escape_string($conn, $_POST["title"])) : "" ?>">
-            <p class="text-gray-500 leading-none">This is the Title of the Comic. It needs to be between 10 and 100 Characters. It may contain special Characters.</p>
+            <p class="text-gray-500 leading-none">This is the Title of the Comic. It needs to be between 10 and 100
+                Characters. It may contain special Characters.</p>
         </div>
         <div class="form-group mb-3">
             <label for="cover" class="text-xl pl-5">Cover <span class="text-gray-600">(Required)</span></label>
             <input required class="block w-full text-sm text-gray-900 bg-gray-50 border border-gray-300 cursor-pointer" id="cover" name="cover" type="file">
-            <p class="text-gray-500 leading-none">This is the cover image. Allowed formats: JPG, JPEG, PNG, GIF or WEBP.</p>
+            <p class="text-gray-500 leading-none">This is the cover image. Allowed formats: JPG, JPEG, PNG, GIF or WEBP.
+            </p>
         </div>
         <div class="form-group mb-3">
             <label for="altnames" class="text-xl pl-5">Alternative Names <span class="text-gray-600">(Optional)</span></label>
             <input type="text" minlength="3" maxlength="500" id="altnames" name="alt_names" class="w-full" placeholder="Alt Name, Another One, This is wrong , This is right, You see" value="<?= isset($_POST["alt_names"]) ? clean(mysqli_real_escape_string($conn, $_POST["alt_names"])) : "" ?>">
-            <p class="text-gray-500 leading-none">Seperate new name by a comma, don't leave a space before the comma, only after one. Maximal 500 Characters.</p>
+            <p class="text-gray-500 leading-none">Seperate new name by a comma, don't leave a space before the comma,
+                only after one. Maximal 500 Characters.</p>
         </div>
         <div class="form-group mb-3">
             <label for="authors" class="text-xl pl-5">Author(s) <span class="text-gray-600">(Optional)</span></label>
             <input type="text" minlength="3" maxlength="100" id="authors" name="authors" class="w-full" placeholder="Author, Another Author" value="<?= isset($_POST["authors"]) ? clean(mysqli_real_escape_string($conn, $_POST["authors"])) : "" ?>">
-            <p class="text-gray-500 leading-none">Seperate new Author by a comma, don't leave a space before the comma, only after one. Maximal 100 Characters.</p>
+            <p class="text-gray-500 leading-none">Seperate new Author by a comma, don't leave a space before the comma,
+                only after one. Maximal 100 Characters.</p>
         </div>
         <div class="form-group mb-3">
             <label for="artists" class="text-xl pl-5">Artist(s) <span class="text-gray-600">(Optional)</span></label>
             <input type="text" minlength="3" maxlength="100" id="artists" name="artists" class="w-full" placeholder="Artist, Another Artist" value="<?= isset($_POST["artists"]) ? clean(mysqli_real_escape_string($conn, $_POST["artists"])) : "" ?>">
-            <p class="text-gray-500 leading-none">Seperate new Artist by a comma, don't leave a space before the comma, only after one. Maximal 100 Characters.</p>
+            <p class="text-gray-500 leading-none">Seperate new Artist by a comma, don't leave a space before the comma,
+                only after one. Maximal 100 Characters.</p>
         </div>
         <div class="form-group mb-3">
             <label for="genres" class="text-xl pl-5">Genre(s) <span class="text-gray-600">(Optional)</span></label>
-            <textarea class="w-full" id="genres" name="genres" placeholder="Seinen, Isekai, Ecchi, Whatever"><?= isset($_POST["genres"]) ? clean(mysqli_real_escape_string($conn, $_POST["genres"])) : "" ?></textarea>
-            <p class="text-gray-500 leading-none">Seperate new Genre by a comma, don't leave a space before the comma, only after one.</p>
+            <textarea class="w-full" id="genres" name="genres" placeholder="Seinen, Isekai, Ecchi, Whatever"><?= isset($_POST["genres"]) ? $_POST["genres"] : "" ?></textarea>
+            <p class="text-gray-500 leading-none">Seperate new Genre by a comma, don't leave a space before the comma,
+                only after one.</p>
         </div>
         <div class="form-group mb-3">
             <label for="language" class="text-xl pl-5">Original Language <span class="text-gray-600">(Optional)</span></label>
             <input type="text" minlength="5" maxlength="20" id="language" name="language" class="w-full" placeholder="E.g. Japanese, Korea, English, etc." value="<?= isset($_POST["language"]) ? clean(mysqli_real_escape_string($conn, $_POST["language"])) : "" ?>">
-            <p class="text-gray-500 leading-none">The Original Language of the Comic. It needs to be between 5 and 20 Characters.</p>
+            <p class="text-gray-500 leading-none">The Original Language of the Comic. It needs to be between 5 and 20
+                Characters.</p>
         </div>
         <div class="form-group mb-3">
             <label for="originalwork" class="text-xl pl-5">Original Work Status <span class="text-gray-600">(Optional)</span></label>
             <select class="w-full" id="originalwork" name="original_work">
-                <option value="0" <?php if (isset($_POST["original_work"])) { if ($_POST["original_work"] == 0) { echo "selected"; } } ?>>Unknown</option>
-                <option value="1" <?php if (isset($_POST["original_work"])) { if ($_POST["original_work"] == 1) { echo "selected"; } } ?>>Publishing</option>
-                <option value="2" <?php if (isset($_POST["original_work"])) { if ($_POST["original_work"] == 2) { echo "selected"; } } ?>>Hiatus</option>
-                <option value="3" <?php if (isset($_POST["original_work"])) { if ($_POST["original_work"] == 3) { echo "selected"; } } ?>>Completed</option>
-                <option value="4" <?php if (isset($_POST["original_work"])) { if ($_POST["original_work"] == 4) { echo "selected"; } } ?>>Canceled</option>
+                <option value="0" <?php if (isset($_POST["original_work"])) {
+                                        if ($_POST["original_work"] == 0) {
+                                            echo "selected";
+                                        }
+                                    } ?>>
+                    Unknown</option>
+                <option value="1" <?php if (isset($_POST["original_work"])) {
+                                        if ($_POST["original_work"] == 1) {
+                                            echo "selected";
+                                        }
+                                    } ?>>
+                    Publishing</option>
+                <option value="2" <?php if (isset($_POST["original_work"])) {
+                                        if ($_POST["original_work"] == 2) {
+                                            echo "selected";
+                                        }
+                                    } ?>>
+                    Hiatus</option>
+                <option value="3" <?php if (isset($_POST["original_work"])) {
+                                        if ($_POST["original_work"] == 3) {
+                                            echo "selected";
+                                        }
+                                    } ?>>
+                    Completed</option>
+                <option value="4" <?php if (isset($_POST["original_work"])) {
+                                        if ($_POST["original_work"] == 4) {
+                                            echo "selected";
+                                        }
+                                    } ?>>
+                    Canceled</option>
             </select>
             <p class="text-gray-500 leading-none">The Status of the Original Work.</p>
         </div>
         <div class="form-group mb-3">
             <label for="uploadstatus" class="text-xl pl-5"><?= config("title") ?> Upload Status <span class="text-gray-600">(Optional)</span></label>
             <select class="w-full" id="uploadstatus" name="upload_status">
-                <option value="0" <?php if (isset($_POST["upload_status"])) { if ($_POST["upload_status"] == 0) { echo "selected"; } } ?>>Unknown</option>
-                <option value="1" <?php if (isset($_POST["upload_status"])) { if ($_POST["upload_status"] == 1) { echo "selected"; } } ?>>Uploading</option>
-                <option value="2" <?php if (isset($_POST["upload_status"])) { if ($_POST["upload_status"] == 2) { echo "selected"; } } ?>>Paused</option>
-                <option value="3" <?php if (isset($_POST["upload_status"])) { if ($_POST["upload_status"] == 3) { echo "selected"; } } ?>>Completed</option>
-                <option value="4" <?php if (isset($_POST["upload_status"])) { if ($_POST["upload_status"] == 4) { echo "selected"; } } ?>>Dropped</option>
+                <option value="0" <?php if (isset($_POST["upload_status"])) {
+                                        if ($_POST["upload_status"] == 0) {
+                                            echo "selected";
+                                        }
+                                    } ?>>
+                    Unknown</option>
+                <option value="1" <?php if (isset($_POST["upload_status"])) {
+                                        if ($_POST["upload_status"] == 1) {
+                                            echo "selected";
+                                        }
+                                    } ?>>
+                    Uploading</option>
+                <option value="2" <?php if (isset($_POST["upload_status"])) {
+                                        if ($_POST["upload_status"] == 2) {
+                                            echo "selected";
+                                        }
+                                    } ?>>
+                    Paused</option>
+                <option value="3" <?php if (isset($_POST["upload_status"])) {
+                                        if ($_POST["upload_status"] == 3) {
+                                            echo "selected";
+                                        }
+                                    } ?>>
+                    Completed</option>
+                <option value="4" <?php if (isset($_POST["upload_status"])) {
+                                        if ($_POST["upload_status"] == 4) {
+                                            echo "selected";
+                                        }
+                                    } ?>>
+                    Dropped</option>
             </select>
             <p class="text-gray-500 leading-none">The Upload Status of the Comic on <?= config("title") ?>.</p>
         </div>
@@ -101,12 +152,12 @@ require("../load.php");
         </div>
         <div class="form-group mb-3">
             <label for="summary" class="text-xl pl-5">Summary <span class="text-gray-600">(Optional)</span></label>
-            <textarea class="w-full" id="summary" name="summary" placeholder="Once upon a time..."><?= isset($_POST["summary"]) ? clean(mysqli_real_escape_string($conn, $_POST["summary"])) : "" ?></textarea>
+            <textarea class="w-full" id="summary" name="summary" placeholder="Once upon a time..."><?= isset($_POST["summary"]) ? $_POST["summary"] : "" ?></textarea>
             <p class="text-gray-500 leading-none">Summary of the Comic, supports BBCode.</p>
         </div>
         <div class="form-group mb-3">
             <label for="notes" class="text-xl pl-5">Notes <span class="text-gray-600">(Optional)</span></label>
-            <textarea class="w-full" id="notes" name="notes" placeholder="Hello, I'm under the water. Can you hear me?"><?= isset($_POST["notes"]) ? clean(mysqli_real_escape_string($conn, $_POST["notes"])) : "" ?></textarea>
+            <textarea class="w-full" id="notes" name="notes" placeholder="Hello, I'm under the water. Can you hear me?"><?= isset($_POST["notes"]) ? $_POST["notes"] : "" ?></textarea>
             <p class="text-gray-500 leading-none">Notes, alas what you want to tell other people.</p>
         </div>
         <div class="form-group">

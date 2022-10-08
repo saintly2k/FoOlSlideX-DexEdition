@@ -1,7 +1,5 @@
 <?php
 
-require("../load.php");
-
 if ($tab == "sessions") $sessions = $conn->query("SELECT * FROM `sessions` WHERE `user`='" . $user["id"] . "' ORDER BY `id` DESC");
 
 ?>

@@ -42,7 +42,7 @@ if ($error == false) {
     }
     if ($generated == true) {
         header("Refresh: 0");
-        die("Let this page refresh, ffs! Why are you always the one ignorign headers?? Fuck yu!!!!11!!11!!");
+        die("Let this page refresh, ffs! Why are you always the one ignoring headers?? Fuck yu!!!!11!!11!!");
     }
 }
 

@@ -1,9 +1,3 @@
-<?php
-
-require("../load.php");
-
-?>
-
 <div class="col-span-12 text-center">
     <h1 class="text-3xl">Publisher's Home</h1>
     <h1 class="text-xl">What do you want to do?</h1>

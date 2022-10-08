@@ -1,9 +1,3 @@
-<?php
-
-require("../load.php");
-
-?>
-
 <div class="col-span-5"></div>
 
 <div class="col-span-2">

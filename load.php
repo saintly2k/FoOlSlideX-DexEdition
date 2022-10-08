@@ -1,10 +1,10 @@
 <?php
 
 // Include must-have files for the site to work properly
-require_once("core/config.php");
-require_once("core/conn.php");
-require_once("core/funky.php");
-require_once("core/user.php");
+require("core/config.php");
+require("core/conn.php");
+require("core/funky.php");
+require("core/user.php");
 
 // Get all Cookies, etc
 $usertheme = isset($_COOKIE[config("cookie") . "_theme"]) ? clean(mysqli_real_escape_string($conn, $_COOKIE[config("cookie") . "_theme"])) : config("default_theme");
