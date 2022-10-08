@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 08, 2022 at 11:17 PM
+-- Generation Time: Oct 08, 2022 at 11:43 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.27
 
@@ -101,7 +101,7 @@ CREATE TABLE `logs` (
 CREATE TABLE `permissions_edit` (
   `id` int(11) NOT NULL,
   `title_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` text NOT NULL,
   `creator_id` int(11) NOT NULL,
   `timestamp` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -115,7 +115,7 @@ CREATE TABLE `permissions_edit` (
 CREATE TABLE `permissions_modify` (
   `id` int(11) NOT NULL,
   `title_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` text NOT NULL,
   `creator_id` int(11) NOT NULL,
   `timestamp` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -129,7 +129,7 @@ CREATE TABLE `permissions_modify` (
 CREATE TABLE `permissions_upload` (
   `id` int(11) NOT NULL,
   `title_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` text NOT NULL,
   `creator_id` int(11) NOT NULL,
   `timestamp` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
