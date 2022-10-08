@@ -18,7 +18,6 @@
     <?php } ?>
 
     <script type="text/javascript">
-        //Ajax Function
         function getHTTPObject() {
             var xmlhttp;
             if (window.ActiveXObject) {
@@ -43,7 +42,6 @@
             }
             return xmlhttp;
         }
-        //HTTP Objects...
         let http = getHTTPObject();
 
         function title(title) {

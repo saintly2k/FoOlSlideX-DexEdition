@@ -20,22 +20,55 @@ $title = $conn->query("SELECT * FROM `titles` WHERE `id`='$id' LIMIT 1")->fetch_
         <p class="text-gray-500">Created by <?= getUser($title["user_id"], "html") ?> on <?= $title["timestamp"] ?></p>
         <hr class="my-2">
         <div class="mb-2">
-            <a href="<?= config("url") ?>publisher/title/<?= $title["id"] ?>/upload">
-                <div class="p-1 bg-green-500 text-white border border-black hover:bg-green-800 shadow-xl">Upload Chapters</div>
-            </a>
-            <p class="text-gray-500 text-left">Who can perform this action? <span class="text-gray-800">Everyone</span>!</p>
+            <?php if ($can_upload == true || $user["id"] == $title["user_id"]) { ?>
+                <a href="<?= config("url") ?>publisher/title/<?= $title["id"] ?>/upload">
+                    <div class="p-1 bg-green-500 text-white border border-black hover:bg-green-800 shadow-xl">Upload Chapters</div>
+                </a>
+                <p class="text-gray-500 text-left">Who can perform this action? <span class="text-gray-800"><?= $can_upload == false && $user["id"] == $title["user_id"] ? "Only You" : "Everyone" ?></span>!</p>
+            <?php } else { ?>
+                <div class="p-1 bg-red-500 text-white border border-black cursor-not-allowed shadow-xl">Upload Chapters</div>
+                <p class="text-gray-500 text-left">Who can perform this action? <span class="text-gray-800">
+                        <?php $c = 1;
+                        foreach ($permission_upload as $uploader) {
+                            if ($c != 1) echo ", ";
+                            echo getUser($uploader, "html");
+                            $c++;
+                        } ?></span>!</p>
+            <?php } ?>
         </div>
         <div class="mb-2">
-            <a href="<?= config("url") ?>publisher/title/<?= $title["id"] ?>/chapters">
-                <div class="p-1 bg-green-500 text-white border border-black hover:bg-green-800 shadow-xl">Modify Chapters</div>
-            </a>
-            <p class="text-gray-500 text-left">Who can perform this action? <span class="text-gray-800">Everyone</span>!</p>
+            <?php if ($can_modify == true || $user["id"] == $title["user_id"]) { ?>
+                <a href="<?= config("url") ?>publisher/title/<?= $title["id"] ?>/chapters">
+                    <div class="p-1 bg-green-500 text-white border border-black hover:bg-green-800 shadow-xl">Modify Chapters</div>
+                </a>
+                <p class="text-gray-500 text-left">Who can perform this action? <span class="text-gray-800"><?= $can_modify == false && $user["id"] == $title["user_id"] ? "Only You" : "Everyone" ?></span>!</p>
+            <?php } else { ?>
+                <div class="p-1 bg-red-500 text-white border border-black cursor-not-allowed shadow-xl">Modify Chapters</div>
+                <p class="text-gray-500 text-left">Who can perform this action? <span class="text-gray-800">
+                        <?php $c = 1;
+                        foreach ($permission_modify as $modifier) {
+                            if ($c != 1) echo ", ";
+                            echo getUser($modifier, "html");
+                            $c++;
+                        } ?></span>!</p>
+            <?php } ?>
         </div>
         <div class="mb-2">
-            <a href="<?= config("url") ?>publisher/title/<?= $title["id"] ?>/edit">
-                <div class="p-1 bg-green-500 text-white border border-black hover:bg-green-800 shadow-xl">Edit Title</div>
-            </a>
-            <p class="text-gray-500 text-left">Who can perform this action? <span class="text-gray-800">Everyone</span>!</p>
+            <?php if ($can_edit == true || $user["id"] == $title["user_id"]) { ?>
+                <a href="<?= config("url") ?>publisher/title/<?= $title["id"] ?>/edit">
+                    <div class="p-1 bg-green-500 text-white border border-black hover:bg-green-800 shadow-xl">Edit Title</div>
+                </a>
+                <p class="text-gray-500 text-left">Who can perform this action? <span class="text-gray-800"><?= $can_edit == false && $user["id"] == $title["user_id"] ? "Only You" : "Everyone" ?></span>!</p>
+            <?php } else { ?>
+                <div class="p-1 bg-red-500 text-white border border-black cursor-not-allowed shadow-xl">Edit Title</div>
+                <p class="text-gray-500 text-left">Who can perform this action? <span class="text-gray-800">
+                        <?php $c = 1;
+                        foreach ($permission_edit as $editors) {
+                            if ($c != 1) echo ", ";
+                            echo getUser($editors, "html");
+                            $c++;
+                        } ?></span>!</p>
+            <?php } ?>
         </div>
         <div class="mb-2">
             <?php if ($user["id"] == $title["user_id"]) { ?>
@@ -45,7 +78,7 @@ $title = $conn->query("SELECT * FROM `titles` WHERE `id`='$id' LIMIT 1")->fetch_
             <?php } else { ?>
                 <div class="p-1 bg-red-500 text-white border border-black cursor-not-allowed shadow-xl">Manage Permissions</div>
             <?php } ?>
-            <p class="text-gray-500 text-left">Who can perform this action? <span class="text-gray-800">Creator only</span>!</p>
+            <p class="text-gray-500 text-left">Who can perform this action? <span class="text-gray-800"><?= $user["id"] == $title["user_id"] ? "Only You" : "Creator Only" ?></span>!</p>
         </div>
     </div>
 </div>
