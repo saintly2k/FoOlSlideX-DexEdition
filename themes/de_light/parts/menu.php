@@ -1,7 +1,33 @@
 </head>
 
 <body onload="loadContent();">
-    <nav class="bg-slate-700 border-gray-200 px-2 sm:px-4 py-2.5 text-white mb-3">
+
+    <?php if ($loggedin == true) { ?>
+        <nav class="bg-slate-500 text-white">
+            <div class="container mx-auto">
+                <div class="py-2">
+                    <ul class="flex flex-row mt-0 mr-6 space-x-8 text-sm">
+                        <li>
+                            <a href="<?= config("url") ?>publisher/home" class="text-white font-bold hover:underline">Publisher</a>
+                        </li>
+                        <li>
+                            <a href="<?= config("url") ?>publisher/my?tab=titles" class="text-white hover:underline">My Titles</a>
+                        </li>
+                        <li>
+                            <a href="<?= config("url") ?>publisher/my?tab=groups" class="text-white hover:underline">My Groups</a>
+                        </li>
+                        <li>
+                            <a href="<?= config("url") ?>publisher/new?type=title" class="text-white hover:underline">New Title</a>
+                        </li>
+                        <li>
+                            <a href="<?= config("url") ?>publisher/new?type=group" class="text-white hover:underline">New Group</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    <?php } ?>
+    <nav class="bg-slate-700 border-gray-200 px-2 sm:px-4 py-2.5 text-white">
         <div class="container flex flex-wrap justify-between items-center mx-auto">
             <a href="<?= config("url") ?>" class="flex items-center">
                 <span class="self-center text-xl font-semibold whitespace-nowrap"><?= config("title") ?></span>
@@ -64,5 +90,6 @@
             </div>
         </div>
     </nav>
+    <hr class="opacity-0 mb-3">
 
     <div id="content" class="container mx-auto grid grid-cols-12 gap-2">

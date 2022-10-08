@@ -4,11 +4,12 @@
 require_once("core/config.php");
 require_once("core/conn.php");
 require_once("core/funky.php");
+require_once("core/user.php");
 
 // Get all Cookies, etc
 $usertheme = isset($_COOKIE[config("cookie") . "_theme"]) ? clean(mysqli_real_escape_string($conn, $_COOKIE[config("cookie") . "_theme"])) : config("default_theme");
 $userlang = isset($_COOKIE[config("cookie") . "_lang"]) ? clean(mysqli_real_escape_string($conn, $_COOKIE[config("cookie") . "_lang"])) : config("default_language");
-$userhistory = isset($_COOKIE[config("cookie") . "_history"]) ? clean(mysqli_real_escape_string($conn, $_COOKIE[config("cookie") . "_history"])) : "";
+$userhistory = isset($_COOKIE[config("cookie") . "_history"]) ? clean(mysqli_real_escape_string($conn, $_COOKIE[config("cookie") . "_history"])) : array();
 
 // Include default files
 require("languages/default/$userlang.def.php");

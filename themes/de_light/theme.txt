@@ -1,0 +1,9 @@
+.-= de_light =-.
+Default Theme for FSX-DEXED
+Created by Saintly2k!
++ Twitter: saintly2k
++ PayPal: yuki.akihabara@yandex.com
++ Ko-Fi: saintly
++ Discord: $aintly#0394
+Compatible with version(s):
+- v0.0.1-beta

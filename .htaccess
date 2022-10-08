@@ -6,7 +6,17 @@ RewriteRule ^/?$ ./handler/home.php
 RewriteRule ^home/?$ ./handler/home.php
 
 # Titles stuff
-RewriteRule ^title/([0-9]*)/?([a-z0-9-]*)/?$ ./handler/title.php?id=$1
+RewriteRule ^title/([0-9]*)/?([a-z0-9-_]*)/?$ ./handler/title.php?id=$1
+
+# Publisher stuff
+RewriteRule ^publisher/title/([0-9]*)/?([a-z0-9-_]*)/?$ ./handler/publisher.title.php?id=$1
+
+# Account stuff
+RewriteRule ^account/login/?$ ./handler/account.login.php
+RewriteRule ^account/signup/?$ ./handler/account.signup.php
+RewriteRule ^account/logout/?$ ./handler/account.logout.php
+RewriteRule ^account/?$ ./handler/account.home.php
+RewriteRule ^account/([a-z]*)/?$ ./handler/account.home.php?tab=$1
 
 RewriteRule ^error/?$ ./handler/error.php
 

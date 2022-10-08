@@ -4,6 +4,12 @@ require("../load.php");
 
 $error = false;
 
+if ($loggedin == false) {
+    header("Location: " . config("url") . "account/login?redirect=publisher/title/" . clean(mysqli_real_escape_string($conn, $_GET["id"])));
+    die("You didn't want to login?");
+    $error = true;
+}
+
 if (!isset($_GET["id"]) || !is_numeric($_GET["id"]) || empty($_GET["id"])) {
     $error = true;
 } else {
@@ -18,12 +24,11 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"]) || empty($_GET["id"])) {
 
 include("../themes/$usertheme/parts/header.php");
 if ($error == false) {
-    echo "<title>Title - " . config("title") . "</title>";
+    echo "<title>Publisher - Title - " . config("title") . "</title>";
     echo "<script type='text/javascript'>document.cookie = 'currentTitle=$id; path=/';</script>";
-    echo "<script type='text/javascript'>title('$title (Title)');</script>";
-    echo callFile(config("url") . "themes/$usertheme/title.php");
+    echo "<script type='text/javascript'>title('Publisher - $title (Title)');</script>";
     include("../themes/$usertheme/parts/menu.php");
-    include("../themes/$usertheme/skeletons/title.php");
+    include("../themes/$usertheme/publisher.title.php");
 } else {
     echo "<title>Error - " . config("title") . "</title>";
     include("../themes/$usertheme/parts/menu.php");

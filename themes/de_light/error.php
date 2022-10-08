@@ -1,6 +1,6 @@
 <?php
 
-require("../../load.php");
+require("../load.php");
 
 ?>
 

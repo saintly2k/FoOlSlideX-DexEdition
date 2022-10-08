@@ -9,10 +9,13 @@
     <!-- TailwindCSS-->
     <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css" type="text/css">
     <?php if (config("tailwind_type") == "cdn") { ?>
-        <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+        <script src="https://cdn.tailwindcss.com?plugins=forms,typography,line-clamp"></script>
     <?php } ?>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" type="text/javascript"></script>
     <link rel="icon" type="image/x-icon" href="<?= config("url") ?>data/assets/img/favicon.ico">
+    <?php if (config("captcha_enabled") == 1) { ?>
+        <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+    <?php } ?>
 
     <script type="text/javascript">
         //Ajax Function

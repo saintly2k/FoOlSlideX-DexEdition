@@ -26,8 +26,8 @@ $resources = $conn->query("SELECT * FROM `resources` WHERE `title_id`='$id' ORDE
 
 <div class="col-span-10">
     <div>
-        <h2 class="text-xl font-bold underline">Details</h2>
-        <b class="text-gray-500">Author(s):</b>
+        <h2 class="text-xl font-bold underline"><?= $lang["details"] ?></h2>
+        <b class="text-gray-500"><?= $lang["authors"] ?>:</b>
         <?php if (!empty($authors)) {
             $c = 1;
             foreach ($authors as $a) {
@@ -38,7 +38,7 @@ $resources = $conn->query("SELECT * FROM `resources` WHERE `title_id`='$id' ORDE
         } else {
             echo $lang["unknown"];
         } ?><br>
-        <b class="text-gray-500">Artist(s):</b>
+        <b class="text-gray-500"><?= $lang["artists"] ?>:</b>
         <?php if (!empty($artists)) {
             $c = 1;
             foreach ($artists as $a) {
@@ -49,7 +49,7 @@ $resources = $conn->query("SELECT * FROM `resources` WHERE `title_id`='$id' ORDE
         } else {
             echo $lang["unknown"];
         } ?><br>
-        <b class="text-gray-500">Genre(s):</b>
+        <b class="text-gray-500"><?= $lang["genres"] ?>:</b>
         <?php if (!empty($genre)) {
             $c = 1;
             foreach ($genre as $g) {
@@ -60,15 +60,15 @@ $resources = $conn->query("SELECT * FROM `resources` WHERE `title_id`='$id' ORDE
         } else {
             echo $lang["unknown"];
         } ?><br>
-        <b class="text-gray-500">Original Language:</b> <?= !empty($title["original_language"]) ? "<a href='" . config("url") . "search?language=" . $title["original_language"] . "' class='text-blue-500 hover:underline'>" . $title["original_language"] . "</a>" : $lang["unknown"] ?><br>
-        <b class="text-gray-500">Original work:</b> <?= !empty($title["original_work"]) ? convertWork($title["original_work"]) : $lang["unknown"] ?><br>
-        <b class="text-gray-500">Upload status:</b> <?= !empty($title["original_work"]) ? convertUpload($title["upload_status"]) : $lang["unknown"] ?><br>
-        <b class="text-gray-500">Year of Release:</b> <?= !empty($title["release_year"]) ? $title["release_year"] : $lang["unknown"] ?>
+        <b class="text-gray-500"><?= $lang["original_language"] ?>:</b> <?= !empty($title["original_language"]) ? "<a href='" . config("url") . "search?language=" . $title["original_language"] . "' class='text-blue-500 hover:underline'>" . $title["original_language"] . "</a>" : $lang["unknown"] ?><br>
+        <b class="text-gray-500"><?= $lang["original_work"] ?>:</b> <?= !empty($title["original_work"]) ? convertWork($title["original_work"]) : $lang["unknown"] ?><br>
+        <b class="text-gray-500"><?= $lang["upload_status"] ?>:</b> <?= !empty($title["original_work"]) ? convertUpload($title["upload_status"]) : $lang["unknown"] ?><br>
+        <b class="text-gray-500"><?= $lang["year_of_release"] ?>:</b> <?= !empty($title["release_year"]) ? $title["release_year"] : $lang["unknown"] ?>
         <?php if (!empty($title["summary"])) { ?>
-            <h2 class="text-xl font-bold underline">Summary</h2>
+            <h2 class="text-xl font-bold underline"><?= $lang["summary"] ?></h2>
             <p class="just"><?= $title["summary"] ?></p>
         <?php } ?>
-        <h2 class="text-xl font-bold underline">Resources</h2>
+        <h2 class="text-xl font-bold underline"><?= $lang["resources"] ?></h2>
         <?php if (mysqli_num_rows($resources) != 0) {
             $c = 1;
             foreach ($resources as $r) {
@@ -80,4 +80,20 @@ $resources = $conn->query("SELECT * FROM `resources` WHERE `title_id`='$id' ORDE
             echo $lang["there_are_no_linked_resources"];
         } ?>
     </div>
+</div>
+
+<div class="col-span-12">
+    Chapters list
+</div>
+
+<div class="col-span-12">
+    Comments
+</div>
+
+<div class="col-span-12 mb-2 text-center">
+    <a href="<?= config("url") ?>publisher/title/<?= $title["id"] ?>/<?= cat($title["title"]) ?>">
+        <div class="bg-blue-500 hover:bg-blue-800 w-full p-1 text-white border border-black shadow-xl">
+            Open and Manage in Publisher
+        </div>
+    </a>
 </div>
