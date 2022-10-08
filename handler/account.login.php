@@ -3,12 +3,13 @@
 require("../load.php");
 require("../sql/account.php");
 
+$error = false;
+
 if ($loggedin == true) {
     header("Location: " . config("url") . "account/home");
+    $error = false;
     die("Didn't you already login? If not, contact the developers - this is a bug! (Also, you are ignoring headers, this isn't a good sign!)");
 }
-
-$error = false;
 
 if (isset($_POST["login"])) {
     $email = clean(mysqli_real_escape_string($conn, $_POST["email"]));
@@ -18,7 +19,7 @@ if (isset($_POST["login"])) {
         $result = tryLogin($email, $password);
         if ($result == "success") {
             if (isset($_GET["redirect"])) {
-                header("Location: " . config("url"). clean(mysqli_real_escape_string($conn, $_GET["redirect"])));
+                header("Location: " . config("url") . clean(mysqli_real_escape_string($conn, $_GET["redirect"])));
             } else {
                 header("Location: " . config("url") . "account/home");
             }
@@ -31,7 +32,13 @@ if (isset($_POST["login"])) {
 }
 
 include("../themes/$usertheme/parts/header.php");
-echo "<title>Login - " . config("title") . "</title>";
-include("../themes/$usertheme/parts/menu.php");
-include("../themes/$usertheme/account.login.php");
+if ($error == false) {
+    echo "<title>Login - " . config("title") . "</title>";
+    include("../themes/$usertheme/parts/menu.php");
+    include("../themes/$usertheme/account.login.php");
+} else {
+    echo "<title>Error - " . config("title") . "</title>";
+    include("../themes/$usertheme/parts/menu.php");
+    include("../themes/$usertheme/error.php");
+}
 include("../themes/$usertheme/parts/footer.php");

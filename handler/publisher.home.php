@@ -7,8 +7,8 @@ $error = false;
 
 if ($loggedin == false) {
     header("Location: " . config("url") . "account/login?redirect=publisher/home");
-    die("You don't seem to be logged in! (Also, you are ignoring headers, this isn't a good sign!)");
     $error = true;
+    die("You don't seem to be logged in? If you are, contact the developers - this is a bug! (Also, you are ignoring headers, this isn't a good sign!)");
 }
 
 if (!isset($_GET["tab"])) {
@@ -17,12 +17,13 @@ if (!isset($_GET["tab"])) {
 }
 
 include("../themes/$usertheme/parts/header.php");
-include("../themes/$usertheme/parts/menu.php");
 if ($error == false) {
     echo "<title>Publisher - Home - " . config("title") . "</title>";
+    include("../themes/$usertheme/parts/menu.php");
     include("../themes/$usertheme/publisher.home.php");
 } else {
     echo "<title>Error - " . config("title") . "</title>";
+    include("../themes/$usertheme/parts/menu.php");
     include("../themes/$usertheme/error.php");
 }
 include("../themes/$usertheme/parts/footer.php");

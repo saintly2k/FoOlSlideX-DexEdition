@@ -2,7 +2,7 @@
 
 require("../load.php");
 
-$id = clean(mysqli_real_escape_string($conn, $_COOKIE["currentTitle"]));
+$id = clean(mysqli_real_escape_string($conn, $_COOKIE[config("cookie") . "_currentTitle"]));
 $title = $conn->query("SELECT * FROM `titles` WHERE `id`='$id' LIMIT 1")->fetch_assoc();
 
 ?>

@@ -22,5 +22,6 @@ $lang["original_language"] = "Original Language";
 $lang["original_work"] = "Original Work";
 $lang["upload_status"] = "Upload Status";
 $lang["year_of_release"] = "Year of Release";
+$lang["year_of_completion"] = "Year of Completion";
 $lang["summary"] = "Summary";
 $lang["resources"] = "Resources";

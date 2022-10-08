@@ -120,8 +120,13 @@ function tryEditProfile($uid, $username, $public, $gender, $biography)
 {
     require("../core/config.php");
     require("../core/conn.php");
-    $conn->query("UPDATE `user` SET `username`='$username', `public`='$public', `gender`='$gender', `biography`='$biography' WHERE `id`='$uid'");
-    return "success";
+    $sql = "UPDATE `user` SET `username`='$username', `public`='$public', `gender`='$gender', `biography`='$biography' WHERE `id`='$uid'";
+    if (!$conn->query($sql)) {
+        $out = "MySQL Error: " . $conn->error;
+    } else {
+        $out = "success";
+    }
+    return $out;
 }
 
 function delSession($sid, $uid)
@@ -175,8 +180,17 @@ function tryEditPassword($uid, $pwd)
     require("../core/config.php");
     require("../core/conn.php");
     $pwd = password_hash($pwd, PASSWORD_BCRYPT);
-    $conn->query("UPDATE `user` SET `password`='$pwd' WHERE `id`='$uid'");
-    $conn->query("DELETE FROM `sessions` WHERE `user`='$uid'");
+    $sql = "UPDATE `user` SET `password`='$pwd' WHERE `id`='$uid'";
     setcookie(config("cookie") . "_session", "", time() - 3600, "/", "");
-    return "success";
+    if (!$conn->query($sql)) {
+        $out = "MySQL Error: " . $conn->error;
+    } else {
+        $sql = "DELETE FROM `sessions` WHERE `user`='$uid'";
+        if (!$conn->query($sql)) {
+            $out = "MySQL Error: " . $conn->error;
+        } else {
+            $out = "success";
+        }
+    }
+    return $out;
 }

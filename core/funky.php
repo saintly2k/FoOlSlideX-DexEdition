@@ -38,11 +38,16 @@ function callFile($file)
     }</script>";
 }
 
-function cat($title)
+function cat($title, $type = "title")
 {
     // This function is used, to make all titles readable for the URL and links
-    $title = str_replace("&", "et", str_replace(' ', '-', strtolower($title)));
-    return preg_replace('/[^A-Za-z0-9\-_]/', '', $title);
+    if ($type == "title") {
+        $title = str_replace("&", "et", str_replace(' ', '-', strtolower($title)));
+        return preg_replace('/[^A-Za-z0-9\-_]/', '', $title);
+    } elseif ($type == "username") {
+        $title = str_replace("&", "et", str_replace(' ', '-', $title));
+        return preg_replace('/[^A-Za-z0-9\-_]/', '', $title);
+    }
 }
 
 function formatDate($date)

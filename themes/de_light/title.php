@@ -2,7 +2,7 @@
 
 require("../../load.php");
 
-$id = clean(mysqli_real_escape_string($conn, $_COOKIE["currentTitle"]));
+$id = clean(mysqli_real_escape_string($conn, $_COOKIE[config("cookie") . "_currentTitle"]));
 $title = $conn->query("SELECT * FROM `titles` WHERE `id`='$id' LIMIT 1")->fetch_assoc();
 $authors = explode(", ", $title["authors"]);
 $artists = explode(", ", $title["artists"]);
@@ -63,7 +63,8 @@ $resources = $conn->query("SELECT * FROM `resources` WHERE `title_id`='$id' ORDE
         <b class="text-gray-500"><?= $lang["original_language"] ?>:</b> <?= !empty($title["original_language"]) ? "<a href='" . config("url") . "search?language=" . $title["original_language"] . "' class='text-blue-500 hover:underline'>" . $title["original_language"] . "</a>" : $lang["unknown"] ?><br>
         <b class="text-gray-500"><?= $lang["original_work"] ?>:</b> <?= !empty($title["original_work"]) ? convertWork($title["original_work"]) : $lang["unknown"] ?><br>
         <b class="text-gray-500"><?= $lang["upload_status"] ?>:</b> <?= !empty($title["original_work"]) ? convertUpload($title["upload_status"]) : $lang["unknown"] ?><br>
-        <b class="text-gray-500"><?= $lang["year_of_release"] ?>:</b> <?= !empty($title["release_year"]) ? $title["release_year"] : $lang["unknown"] ?>
+        <b class="text-gray-500"><?= $lang["year_of_release"] ?>:</b> <?= !empty($title["release_year"]) ? $title["release_year"] : $lang["unknown"] ?><br>
+        <b class="text-gray-500"><?= $lang["year_of_completion"] ?>:</b> <?= !empty($title["complete_year"]) ? $title["complete_year"] : $lang["unknown"] ?>
         <?php if (!empty($title["summary"])) { ?>
             <h2 class="text-xl font-bold underline"><?= $lang["summary"] ?></h2>
             <p class="just"><?= $title["summary"] ?></p>

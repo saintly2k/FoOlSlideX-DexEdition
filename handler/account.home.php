@@ -8,8 +8,8 @@ $serror = false;
 
 if ($loggedin == false) {
     header("Location: " . config("url") . "account/login?redirect=account/home");
-    die("You don't seem to be logged in! (Also, you are ignoring headers, this isn't a good sign!)");
     $error = true;
+    die("You don't seem to be logged in! (Also, you are ignoring headers, this isn't a good sign!)");
 }
 
 if (!isset($_GET["tab"])) {
@@ -27,7 +27,7 @@ if ($_GET["tab"] != "home" && $_GET["tab"] != "profile" && $_GET["tab"] != "avat
 
 if (isset($_POST["editProfile"])) {
     $uid = $user["id"];
-    $username = clean(mysqli_real_escape_string($conn, $_POST["username"]));
+    $username = cat(clean(mysqli_real_escape_string($conn, $_POST["username"])), "username");
     $public = clean(mysqli_real_escape_string($conn, $_POST["public"]));
     $gender = clean(mysqli_real_escape_string($conn, $_POST["gender"]));
     $biography = clean(mysqli_real_escape_string($conn, $_POST["biography"]));
@@ -78,12 +78,13 @@ if (isset($_POST["editPassword"])) {
 }
 
 include("../themes/$usertheme/parts/header.php");
-include("../themes/$usertheme/parts/menu.php");
 if ($error == false) {
     echo "<title>Account - " . ucfirst($tab) . " - " . config("title") . "</title>";
+    include("../themes/$usertheme/parts/menu.php");
     include("../themes/$usertheme/account.home.php");
 } else {
     echo "<title>Error - " . config("title") . "</title>";
+    include("../themes/$usertheme/parts/menu.php");
     include("../themes/$usertheme/error.php");
 }
 include("../themes/$usertheme/parts/footer.php");
