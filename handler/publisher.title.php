@@ -16,12 +16,6 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"]) || empty($_GET["id"])) {
     $error = true;
 } else {
     $id = clean(mysqli_real_escape_string($conn, $_GET["id"]));
-    $title = $conn->query("SELECT `title` FROM `titles` WHERE `id`='$id' LIMIT 1")->fetch_assoc();
-    if (empty($title)) {
-        $error = true;
-    } else {
-        $title = mysqli_real_escape_string($conn, $title["title"]);
-    }
 }
 
 if ($error == false) {

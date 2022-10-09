@@ -206,6 +206,19 @@ function getBrowser()
     );
 }
 
+function logs($uid, $action, $before, $after)
+{
+    require("config.php");
+    require("conn.php");
+    if (config("logs") == 1) {
+        $browser = getBrowser();
+        $ip = getIpAddress();
+        $browserDetails = $browser["userAgent"];
+        $browser = $browser["name"] . " " . $browser["version"] . ", " . ucfirst($browser["platform"]);
+        $conn->query("INSERT INTO `logs`(`user_id`,`action`,`before`,`after`,`ip`,`browser`,`browser_info`) VALUES('$uid','$action','$before','$after','$ip','$browser','$browserDetails')");
+    }
+}
+
 function asteristk($string, $amount = 5)
 {
     $asterisks = str_repeat("*", $amount);

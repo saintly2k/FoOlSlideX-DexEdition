@@ -4,15 +4,40 @@ require("../load.php");
 require("../sql/publisher.php");
 
 $error = false;
+$generated = false;
 $serror = false;
 
 if ($loggedin == false) {
-    header("Location: " . config("url") . "account/login?redirect=publisher/new/title");
+    header("Location: " . config("url") . "account/login?redirect=publisher/title/" . clean(mysqli_real_escape_string($conn, $_GET["id"])) . "/edit");
     $error = true;
     die("You don't seem to be logged in? If you are, contact the developers - this is a bug! (Also, you are ignoring headers, this isn't a good sign!)");
 }
 
-if (isset($_POST["addTitle"])) {
+if (!isset($_GET["id"]) || !is_numeric($_GET["id"]) || empty($_GET["id"])) {
+    $error = true;
+} else {
+    $id = clean(mysqli_real_escape_string($conn, $_GET["id"]));
+    $title = $conn->query("SELECT * FROM `titles` WHERE `id`='$id' LIMIT 1")->fetch_assoc();
+    if (empty($title["id"])) {
+        $error = true;
+        $serror = true;
+        $return = "Title doesn't exist!";
+    }
+}
+
+if ($error == false) {
+    $permission_edit = $conn->query("SELECT * FROM  `permissions_edit` WHERE `title_id`='$id' LIMIT 1")->fetch_assoc();
+    if (empty($permission_edit["id"])) {
+        generatePermissions("edit", $id, "0", $user["id"]);
+        $generated = true;
+    }
+    if ($generated == true) {
+        header("Refresh: 0");
+        die("Let this page refresh, ffs! Why are you always the one ignoring headers?? Fuck yu!!!!11!!11!!");
+    }
+}
+
+if (isset($_POST["editTitle"])) {
     $comic = array();
     $comic["title"] = clean(mysqli_real_escape_string($conn, $_POST["title"]));
     if (isset($_FILES["cover"])) {
@@ -34,22 +59,21 @@ if (isset($_POST["addTitle"])) {
     $comic["summary"] = clean(mysqli_real_escape_string($conn, $_POST["summary"]));
     $comic["notes"] = clean(mysqli_real_escape_string($conn, $_POST["notes"]));
 
-    $return = checkTitleFormData($comic["title"], $comic["cover"]["base"], $comic["alt_names"], $comic["authors"], $comic["artists"], $comic["language"], $comic["original_work"], $comic["upload_status"], $comic["release_year"], $comic["complete_year"]);
+    $return = checkTitleFormData($comic["title"], $comic["cover"]["base"], $comic["alt_names"], $comic["authors"], $comic["artists"], $comic["language"], $comic["original_work"], $comic["upload_status"], $comic["release_year"], $comic["complete_year"], "edit");
     if ($return == "success") {
-        $return = tryCreateTitle($comic["title"], "jpeg", $comic["alt_names"], $comic["authors"], $comic["artists"], $comic["genres"], $comic["language"], $comic["original_work"], $comic["upload_status"], $comic["release_year"], $comic["complete_year"], $comic["summary"], $comic["notes"], $user["id"]);
+        $return = tryEditTitle($title["id"], $comic["title"], $comic["alt_names"], $comic["authors"], $comic["artists"], $comic["genres"], $comic["language"], $comic["original_work"], $comic["upload_status"], $comic["release_year"], $comic["complete_year"], $comic["summary"], $comic["notes"], $user["id"]);
         if ($return == "success") {
-            $title = $conn->query("SELECT * FROM `titles` ORDER BY `id` DESC LIMIT 1")->fetch_assoc();
-            $return = generatePermissions("all", $title["id"], "0", $user["id"]);
-            if ($return == "success") {
+            if (!empty($comic["cover"]["base"])) {
                 $return = uploadImage($comic["cover"]["tmp"], $comic["cover"]["file"], "../data/covers/" . $title["id"] . ".jpeg", $user["id"]);
                 if ($return == "success") {
-                    header("Location: " . config("url") . "publisher/title/" . $title["id"] . "/" . cat($title["title"]));
-                    $serror = true;
+                    header("Refresh: 0");
+                    die("Let this page refresh you #*?!+>-2");
                 } else {
                     $serror = true;
                 }
             } else {
-                $serror = true;
+                header("Refresh: 0");
+                die("Let this page refresh you #*?!+>-2");
             }
         } else {
             $serror = true;
@@ -61,9 +85,10 @@ if (isset($_POST["addTitle"])) {
 
 include("../themes/$usertheme/parts/header.php");
 if ($error == false) {
-    echo "<title>Publisher - New Title - " . config("title") . "</title>";
+    echo "<title>Publisher - Edit Title - " . config("title") . "</title>";
+    echo "<script type='text/javascript'>Cookies.set('" . config("cookie") . "_currentTitle', '$id')</script>";
     include("../themes/$usertheme/parts/menu.php");
-    include("../themes/$usertheme/publisher.new.title.php");
+    include("../themes/$usertheme/publisher.title.edit.php");
 } else {
     echo "<title>Error - " . config("title") . "</title>";
     include("../themes/$usertheme/parts/menu.php");

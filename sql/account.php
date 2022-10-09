@@ -39,6 +39,7 @@ function trySignup($email, $password)
     $emailcheck = $conn->query("SELECT * FROM `user` WHERE `email`='$email' LIMIT 1")->fetch_assoc();
     if (!empty($emailcheck["id"])) {
         $out = "Email already in use!";
+        logs("0", "trySignup", "Not Created", "Error: Email");
     } else {
         $password = password_hash($password, PASSWORD_BCRYPT);
         $username = genUsername();
@@ -47,6 +48,7 @@ function trySignup($email, $password)
         $c = $c["id"];
         copy("../data/user/0.png", "../data/user/$c.png");
         $out = "success";
+        logs("0", "trySignup", "Not Created", "success");
     }
     return $out;
 }
@@ -67,6 +69,7 @@ function tryLogin($email, $password)
             if ($user["banned"] == true) {
                 $error = true;
                 $out = "This account has been banned. Reason: " . $user["banned_reason"];
+                logs($user["id"], "tryLogin", "Not Loggedin", "Error: Banned");
             } else {
                 $token = md5(rand());
                 $ip = getIpAddress();
@@ -76,16 +79,19 @@ function tryLogin($email, $password)
                 $conn->query("INSERT INTO `sessions`(`user`,`token`,`browser`,`browser_details`,`ip`) VALUES('" . $user["id"] . "','$token','$browser','$browserDetails','$ip')");
                 setcookie(config("cookie") . "_session", $token, time() + (86400 * 30), "/");
                 $out = "success";
+                logs($user["id"], "tryLogin", "Not Loggedin", "success");
             }
         } else {
             // Ewww error
             $error = true;
             $out = "Password is wrong!";
+            logs($user["id"], "tryLogin", "Not Loggedin", "Error: Wrong Password");
         }
     } else {
         // Email doesn't match
         $error = true;
         $out = "Email is wrong!";
+        logs($user["id"], "tryLogin", "Not Loggedin", "Error: Wrong Email");
     }
     return $out;
 }
@@ -121,10 +127,14 @@ function tryEditProfile($uid, $username, $public, $gender, $biography)
     require("../core/config.php");
     require("../core/conn.php");
     $sql = "UPDATE `user` SET `username`='$username', `public`='$public', `gender`='$gender', `biography`='$biography' WHERE `id`='$uid'";
+    $user = $conn->query("SELECT * FROM `user` WHERE `id`='$uid' LIMIT 1")->fetch_assoc();
+    logs($uid, "tryEditProfileData", $user["username"] . "; " . $user["gender"] . "; " . $user["biography"], "$username; $gender; $biography;");
     if (!$conn->query($sql)) {
         $out = "MySQL Error: " . $conn->error;
+        logs($user["id"], "tryEditProfile", "Not Edited", "Error: " . $conn->error);
     } else {
         $out = "success";
+        logs($user["id"], "tryEditProfile", "Not Edited", "success");
     }
     return $out;
 }
@@ -134,6 +144,7 @@ function delSession($sid, $uid)
     require("../core/config.php");
     require("../core/conn.php");
     $conn->query("DELETE FROM `sessions` WHERE `id`='$sid' AND `user`='$uid'");
+    logs($uid, "delSession", "Not Deleted", "success");
 }
 
 function checkPassData($masterPassword, $passwordOld, $passwordNew1, $passwordNew2)
@@ -181,15 +192,20 @@ function tryEditPassword($uid, $pwd)
     require("../core/conn.php");
     $pwd = password_hash($pwd, PASSWORD_BCRYPT);
     $sql = "UPDATE `user` SET `password`='$pwd' WHERE `id`='$uid'";
+    $user = $conn->query("SELECT * FROM `user` WHERE `id`='$uid' LIMIT 1")->fetch_assoc();
+    logs($user["id"], "tryEditPasswordData", $user["password"], $pwd);
     setcookie(config("cookie") . "_session", "", time() - 3600, "/", "");
     if (!$conn->query($sql)) {
         $out = "MySQL Error: " . $conn->error;
+        logs($user["id"], "tryEditPassword", "Not Edited", "Error: " . $conn->error);
     } else {
         $sql = "DELETE FROM `sessions` WHERE `user`='$uid'";
         if (!$conn->query($sql)) {
             $out = "MySQL Error: " . $conn->error;
+            logs($user["id"], "tryEditPassword", "Session Not Deleted", "Error: " . $conn->error);
         } else {
             $out = "success";
+            logs($user["id"], "tryEditPassword", "Not Edit", "success");
         }
     }
     return $out;

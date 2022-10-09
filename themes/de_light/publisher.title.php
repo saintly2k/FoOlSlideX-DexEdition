@@ -32,7 +32,7 @@ $can_edit = $permission_edit["user_id"] == 0 || in_array($user["id"], explode(",
         <hr class="my-2">
         <div class="mb-2">
             <?php if ($can_upload == true || $user["id"] == $title["user_id"]) { ?>
-                <a href="<?= config("url") ?>publisher/title/<?= $title["id"] ?>/upload">
+                <a href="<?= config("url") ?>publisher/title/<?= $title["id"] ?>/upload" target="_blank">
                     <div class="p-1 bg-green-500 text-white border border-black hover:bg-green-800 shadow-xl">Upload Chapters</div>
                 </a>
                 <p class="text-gray-500 text-left">Who can perform this action? <span class="text-gray-800"><?= $can_upload == false && $user["id"] == $title["user_id"] ? "Only You" : "Everyone" ?></span>!</p>
@@ -49,7 +49,7 @@ $can_edit = $permission_edit["user_id"] == 0 || in_array($user["id"], explode(",
         </div>
         <div class="mb-2">
             <?php if ($can_modify == true || $user["id"] == $title["user_id"]) { ?>
-                <a href="<?= config("url") ?>publisher/title/<?= $title["id"] ?>/chapters">
+                <a href="<?= config("url") ?>publisher/title/<?= $title["id"] ?>/chapters" target="_blank">
                     <div class="p-1 bg-green-500 text-white border border-black hover:bg-green-800 shadow-xl">Modify Chapters</div>
                 </a>
                 <p class="text-gray-500 text-left">Who can perform this action? <span class="text-gray-800"><?= $can_modify == false && $user["id"] == $title["user_id"] ? "Only You" : "Everyone" ?></span>!</p>
@@ -66,7 +66,7 @@ $can_edit = $permission_edit["user_id"] == 0 || in_array($user["id"], explode(",
         </div>
         <div class="mb-2">
             <?php if ($can_edit == true || $user["id"] == $title["user_id"]) { ?>
-                <a href="<?= config("url") ?>publisher/title/<?= $title["id"] ?>/edit">
+                <a href="<?= config("url") ?>publisher/title/<?= $title["id"] ?>/edit" target="_blank">
                     <div class="p-1 bg-green-500 text-white border border-black hover:bg-green-800 shadow-xl">Edit Title</div>
                 </a>
                 <p class="text-gray-500 text-left">Who can perform this action? <span class="text-gray-800"><?= $can_edit == false && $user["id"] == $title["user_id"] ? "Only You" : "Everyone" ?></span>!</p>
@@ -83,13 +83,13 @@ $can_edit = $permission_edit["user_id"] == 0 || in_array($user["id"], explode(",
         </div>
         <div class="mb-2">
             <?php if ($user["id"] == $title["user_id"]) { ?>
-                <a href="<?= config("url") ?>publisher/title/<?= $title["id"] ?>/permission">
+                <a href="<?= config("url") ?>publisher/title/<?= $title["id"] ?>/permission" target="_blank">
                     <div class="p-1 bg-green-500 text-white border border-black hover:bg-green-800 shadow-xl">Manage Permissions</div>
                 </a>
             <?php } else { ?>
                 <div class="p-1 bg-red-500 text-white border border-black cursor-not-allowed shadow-xl">Manage Permissions</div>
             <?php } ?>
-            <p class="text-gray-500 text-left">Who can perform this action? <span class="text-gray-800"><?= $user["id"] == $title["user_id"] ? "Only You" : "Creator Only" ?></span>!</p>
+            <p class="text-gray-500 text-left">Who can perform this action? <span class="text-gray-800"><?= $user["id"] == $title["user_id"] ? "Only You (and Staff)" : "Creator (and Staff) Only" ?></span>!</p>
         </div>
     </div>
 </div>
