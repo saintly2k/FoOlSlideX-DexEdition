@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 08, 2022 at 11:43 PM
+-- Generation Time: Oct 09, 2022 at 04:01 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.27
 
@@ -72,7 +72,7 @@ INSERT INTO `config` (`id`, `name`, `value`) VALUES
 (14, 'home_display_chapters', '36'),
 (15, 'site_started', '2022'),
 (16, 'display_credits', '1'),
-(17, 'logs', '1');
+(17, 'logs', '0');
 
 -- --------------------------------------------------------
 
