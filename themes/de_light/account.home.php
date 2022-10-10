@@ -206,7 +206,7 @@ if ($tab == "sessions") $sessions = $conn->query("SELECT * FROM `sessions` WHERE
                                         <p><b>Token:</b> <?= asteristk($session["token"], 20) ?></p>
                                         <p><b>Browser:</b> <?= $session["browser"] ?></p>
                                         <p><b>Details:</b> <?= $session["browser_details"] ?></p>
-                                        <p><b>IP:</b> <?= asteristk($session["ip"]) ?></p>
+                                        <p><b>IP:</b> <?= $session["ip"] ?></p>
                                         <p><b>Date:</b> <?= formatDate($session["timestamp"]) ?></p>
                                         <p><b>Timestamp:</b> <?= $session["timestamp"] ?></p>
                                     </div>

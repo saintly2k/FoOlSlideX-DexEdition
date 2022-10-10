@@ -139,7 +139,7 @@ function tryEditTitle($tid, $title, $alt, $authors, $artists, $genre, $language,
     require("../core/conn.php");
     $release = empty($release) ? "NULL" : "'$release'";
     $complete = empty($complete) ? "NULL" : "'$complete'";
-    $sql = "UPDATE `titles` SET `title`='$title',`alt_names`='alt',`authors`='$authors',`artists`='$artists',`genre`='$genre',`original_language`='$language',`original_work`='$origwork',`upload_status`='$uplstatus',`release_year`=$release,`complete_year`=$complete,`summary`='$summary',`notes`='$notes' WHERE `id`='$tid'";
+    $sql = "UPDATE `titles` SET `title`='$title',`alt_names`='$alt',`authors`='$authors',`artists`='$artists',`genre`='$genre',`original_language`='$language',`original_work`='$origwork',`upload_status`='$uplstatus',`release_year`=$release,`complete_year`=$complete,`summary`='$summary',`notes`='$notes' WHERE `id`='$tid'";
     if (config("logs") == 1) {
         $title = $conn->query("SELECT * FROM `titles` WHERE `id`='$tid' LIMIT 1")->fetch_assoc();
         $oldCover = "../data/old/covers/" . $title["id"] . ".jpeg";
