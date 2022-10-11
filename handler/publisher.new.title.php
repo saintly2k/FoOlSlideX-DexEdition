@@ -6,10 +6,8 @@ require("../sql/publisher.php");
 $error = false;
 $serror = false;
 
-if ($loggedin == false) {
-    header("Location: " . config("url") . "account/login?redirect=publisher/new/title");
+if ($userlevel["can_add_title"] == 0) {
     $error = true;
-    die("You don't seem to be logged in? If you are, contact the developers - this is a bug! (Also, you are ignoring headers, this isn't a good sign!)");
 }
 
 if (isset($_POST["addTitle"])) {

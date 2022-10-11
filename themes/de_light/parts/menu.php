@@ -2,7 +2,7 @@
 
 <body onload="loadContent();">
 
-    <?php if ($loggedin == true) { ?>
+    <?php if ($userlevel["publisher"] == 1) { ?>
         <nav class="bg-slate-500 text-white">
             <div class="container mx-auto">
                 <div class="py-2">
@@ -73,6 +73,9 @@
                     </li>
                     <li>
                         <a href="<?= config("url") ?>browse" class="block py-2 pr-4 pl-3 font-bold rounded md:hover:bg-transparent md:hover:underline md:p-0"><?= $lang["browse"] ?></a>
+                    </li>
+                    <li>
+                        <a href="<?= config("url") ?>groups" class="block py-2 pr-4 pl-3 font-bold rounded md:hover:bg-transparent md:hover:underline md:p-0"><?= $lang["groups"] ?></a>
                     </li>
                     <li>
                         <a href="<?= config("url") ?>search" class="block py-2 pr-4 pl-3 font-bold rounded md:hover:bg-transparent md:hover:underline md:p-0"><?= $lang["search"] ?></a>

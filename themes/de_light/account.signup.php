@@ -12,8 +12,8 @@
         <?php } ?>
         <input type="submit" name="signup" class="w-full p-2 bg-green-500 text-white border border-black hover:bg-green-800 cursor-pointer">
     </form>
-    <?php if ($error == true) { ?>
-        <div class="text-red-500 py-2 text-center" id="errortext"><?= $result ?></div>
+    <?php if ($result2 != "success") { ?>
+        <div class="text-red-500 py-2 text-center" id="errortext"><?= $result2 ?></div>
     <?php } ?>
     <hr class="my-2">
     <p class="text-gray-500">Already have one? <a href="<?= config("url") ?>account/login" class="text-blue-500 hover:underline">Login!</a></p>

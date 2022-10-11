@@ -1,12 +1,14 @@
 <?php
 
+$loggingout = true;
+
 require("../load.php");
 require("../sql/account.php");
 
 if ($loggedin == false) {
     header("Location: " . config("url") . "account/login");
-    $error = false;
-    logs($user["id"], "tryLogout", "Not Loggedout", "Error: Not Loggedin");
+    $error = true;
+    logs("0", "tryLogout", "Not Loggedout", "Error: Not Loggedin");
     die("You're not even logged in? If you are, contact the developers - this is a bug! (Also, you are ignoring headers, this isn't a good sign!)");
 }
 

@@ -6,6 +6,7 @@ $lang["open_menu"] = "Open menu";
 $lang["home"] = "Home";
 $lang["latest"] = "Latest";
 $lang["browse"] = "Browse";
+$lang["groups"] = "Groups";
 $lang["history"] = "History";
 $lang["settings"] = "Settings";
 $lang["account"] = "Account";

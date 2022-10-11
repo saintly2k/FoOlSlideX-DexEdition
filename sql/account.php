@@ -43,7 +43,7 @@ function trySignup($email, $password)
     } else {
         $password = password_hash($password, PASSWORD_BCRYPT);
         $username = genUsername();
-        $conn->query("INSERT INTO `user`(`level`,`username`,`email`,`password`,`avatar`,`public`,`gender`,`biography`,`banned`,`banned_reason`) VALUES('100', '$username', '$email', '$password', 'png', '1', '0', NULL, '0', NULL)");
+        $conn->query("INSERT INTO `user`(`level`,`username`,`email`,`password`,`avatar`,`public`,`gender`,`biography`,`banned`,`banned_reason`) VALUES('" . config("defaultlevel") . "', '$username', '$email', '$password', 'png', '1', '0', NULL, '0', NULL)");
         $c = $conn->query("SELECT * FROM `user` ORDER BY `id` DESC LIMIT 1")->fetch_assoc();
         $c = $c["id"];
         copy("../data/user/0.png", "../data/user/$c.png");

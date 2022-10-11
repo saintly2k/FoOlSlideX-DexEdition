@@ -7,10 +7,8 @@ $error = false;
 $generated = false;
 $serror = false;
 
-if ($loggedin == false) {
-    header("Location: " . config("url") . "account/login?redirect=publisher/title/" . clean(mysqli_real_escape_string($conn, $_GET["id"])) . "/edit");
+if ($userlevel["can_edit_title"] == 0) {
     $error = true;
-    die("You don't seem to be logged in? If you are, contact the developers - this is a bug! (Also, you are ignoring headers, this isn't a good sign!)");
 }
 
 if (!isset($_GET["id"]) || !is_numeric($_GET["id"]) || empty($_GET["id"])) {

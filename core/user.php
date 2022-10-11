@@ -14,10 +14,19 @@ if (isset($_COOKIE[config("cookie") . "_session"]) && !empty($_COOKIE[config("co
         $user = $user["user"];
         $user = $conn->query("SELECT * FROM `user` WHERE `id`='$user' LIMIT 1")->fetch_assoc();
         $loggedin = true;
+        $userlevel = $conn->query("SELECT * FROM `levels` WHERE `level`='" . $user["level"] . "' LIMIT 1")->fetch_assoc();
     } else {
         // Invalid session! (Hacking attempt or outdated? Who knows...)
         $loggedin = false;
+        $userlevel = $conn->query("SELECT * FROM `levels` WHERE `level`='" . config("guestlevel") . "' LIMIT 1")->fetch_assoc();
     }
 } else {
     $loggedin = false;
+    $userlevel = $conn->query("SELECT * FROM `levels` WHERE `level`='" . config("guestlevel") . "' LIMIT 1")->fetch_assoc();
+}
+
+if ($userlevel["banned"] == 1 && $loggedin == true && !isset($loggingout)) {
+    echo "You're banned. Don't ignore headers you idiot.";
+    header("Location: " . config("url") . "account/logout");
+    die("You're banned. Don't ignore headers you idiot.");
 }
