@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 09, 2022 at 04:01 PM
--- Server version: 10.4.22-MariaDB
--- PHP Version: 7.4.27
+-- Erstellungszeit: 12. Okt 2022 um 01:18
+-- Server-Version: 10.4.22-MariaDB
+-- PHP-Version: 7.4.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `batato`
+-- Datenbank: `batato`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `chapters`
+-- Tabellenstruktur für Tabelle `chapters`
 --
 
 CREATE TABLE `chapters` (
@@ -42,7 +42,7 @@ CREATE TABLE `chapters` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `config`
+-- Tabellenstruktur für Tabelle `config`
 --
 
 CREATE TABLE `config` (
@@ -52,7 +52,7 @@ CREATE TABLE `config` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `config`
+-- Daten für Tabelle `config`
 --
 
 INSERT INTO `config` (`id`, `name`, `value`) VALUES
@@ -72,12 +72,71 @@ INSERT INTO `config` (`id`, `name`, `value`) VALUES
 (14, 'home_display_chapters', '36'),
 (15, 'site_started', '2022'),
 (16, 'display_credits', '1'),
-(17, 'logs', '0');
+(17, 'logs', '0'),
+(18, 'defaultlevel', '100'),
+(19, 'guestlevel', '1');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `logs`
+-- Tabellenstruktur für Tabelle `groups`
+--
+
+CREATE TABLE `groups` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` text DEFAULT NULL,
+  `permission` text NOT NULL,
+  `modify` text NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 1,
+  `owner` int(11) NOT NULL,
+  `redirect` int(11) NOT NULL,
+  `creator` int(11) NOT NULL,
+  `timestamp` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `levels`
+--
+
+CREATE TABLE `levels` (
+  `id` int(11) NOT NULL,
+  `level` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `can_login` tinyint(1) NOT NULL,
+  `can_add_title` tinyint(1) NOT NULL,
+  `can_add_group` tinyint(1) NOT NULL,
+  `can_add_chapter` tinyint(1) NOT NULL,
+  `can_edit_title` tinyint(1) NOT NULL,
+  `can_edit_group` tinyint(1) NOT NULL,
+  `can_edit_chapter` tinyint(1) NOT NULL,
+  `can_modify_chapters` tinyint(1) NOT NULL,
+  `can_edit_users` tinyint(1) NOT NULL,
+  `publisher` tinyint(1) NOT NULL,
+  `mod` tinyint(1) NOT NULL,
+  `admin` tinyint(1) NOT NULL,
+  `banned` tinyint(1) NOT NULL,
+  `timestamp` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `levels`
+--
+
+INSERT INTO `levels` (`id`, `level`, `name`, `can_login`, `can_add_title`, `can_add_group`, `can_add_chapter`, `can_edit_title`, `can_edit_group`, `can_edit_chapter`, `can_modify_chapters`, `can_edit_users`, `publisher`, `mod`, `admin`, `banned`, `timestamp`) VALUES
+(1, 1, 'Guest', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2022-10-12 00:39:01'),
+(2, 100, 'User', 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, '2022-10-12 00:39:20'),
+(3, 200, 'Uploader', 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, '2022-10-12 00:39:36'),
+(4, 500, 'Moderator', 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, '2022-10-12 00:39:49'),
+(5, 999, 'Administrator', 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, '2022-10-12 00:40:09'),
+(6, 5, 'Banned', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '2022-10-12 00:40:19');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `logs`
 --
 
 CREATE TABLE `logs` (
@@ -95,7 +154,7 @@ CREATE TABLE `logs` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `permissions_edit`
+-- Tabellenstruktur für Tabelle `permissions_edit`
 --
 
 CREATE TABLE `permissions_edit` (
@@ -109,7 +168,7 @@ CREATE TABLE `permissions_edit` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `permissions_modify`
+-- Tabellenstruktur für Tabelle `permissions_modify`
 --
 
 CREATE TABLE `permissions_modify` (
@@ -123,7 +182,7 @@ CREATE TABLE `permissions_modify` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `permissions_upload`
+-- Tabellenstruktur für Tabelle `permissions_upload`
 --
 
 CREATE TABLE `permissions_upload` (
@@ -137,7 +196,7 @@ CREATE TABLE `permissions_upload` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `resources`
+-- Tabellenstruktur für Tabelle `resources`
 --
 
 CREATE TABLE `resources` (
@@ -151,7 +210,7 @@ CREATE TABLE `resources` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sessions`
+-- Tabellenstruktur für Tabelle `sessions`
 --
 
 CREATE TABLE `sessions` (
@@ -167,7 +226,7 @@ CREATE TABLE `sessions` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `titles`
+-- Tabellenstruktur für Tabelle `titles`
 --
 
 CREATE TABLE `titles` (
@@ -192,7 +251,7 @@ CREATE TABLE `titles` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Tabellenstruktur für Tabelle `user`
 --
 
 CREATE TABLE `user` (
@@ -211,129 +270,153 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Indexes for dumped tables
+-- Indizes der exportierten Tabellen
 --
 
 --
--- Indexes for table `chapters`
+-- Indizes für die Tabelle `chapters`
 --
 ALTER TABLE `chapters`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `config`
+-- Indizes für die Tabelle `config`
 --
 ALTER TABLE `config`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `logs`
+-- Indizes für die Tabelle `groups`
+--
+ALTER TABLE `groups`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `levels`
+--
+ALTER TABLE `levels`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `logs`
 --
 ALTER TABLE `logs`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `permissions_edit`
+-- Indizes für die Tabelle `permissions_edit`
 --
 ALTER TABLE `permissions_edit`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `permissions_modify`
+-- Indizes für die Tabelle `permissions_modify`
 --
 ALTER TABLE `permissions_modify`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `permissions_upload`
+-- Indizes für die Tabelle `permissions_upload`
 --
 ALTER TABLE `permissions_upload`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `resources`
+-- Indizes für die Tabelle `resources`
 --
 ALTER TABLE `resources`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sessions`
+-- Indizes für die Tabelle `sessions`
 --
 ALTER TABLE `sessions`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `titles`
+-- Indizes für die Tabelle `titles`
 --
 ALTER TABLE `titles`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `user`
+-- Indizes für die Tabelle `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT für exportierte Tabellen
 --
 
 --
--- AUTO_INCREMENT for table `chapters`
+-- AUTO_INCREMENT für Tabelle `chapters`
 --
 ALTER TABLE `chapters`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `config`
+-- AUTO_INCREMENT für Tabelle `config`
 --
 ALTER TABLE `config`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
--- AUTO_INCREMENT for table `logs`
+-- AUTO_INCREMENT für Tabelle `groups`
+--
+ALTER TABLE `groups`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT für Tabelle `levels`
+--
+ALTER TABLE `levels`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT für Tabelle `logs`
 --
 ALTER TABLE `logs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `permissions_edit`
+-- AUTO_INCREMENT für Tabelle `permissions_edit`
 --
 ALTER TABLE `permissions_edit`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `permissions_modify`
+-- AUTO_INCREMENT für Tabelle `permissions_modify`
 --
 ALTER TABLE `permissions_modify`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `permissions_upload`
+-- AUTO_INCREMENT für Tabelle `permissions_upload`
 --
 ALTER TABLE `permissions_upload`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `resources`
+-- AUTO_INCREMENT für Tabelle `resources`
 --
 ALTER TABLE `resources`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `sessions`
+-- AUTO_INCREMENT für Tabelle `sessions`
 --
 ALTER TABLE `sessions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `titles`
+-- AUTO_INCREMENT für Tabelle `titles`
 --
 ALTER TABLE `titles`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `user`
+-- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
