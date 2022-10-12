@@ -7,6 +7,7 @@ RewriteRule ^home/?$ ./handler/home.php
 
 # Titles stuff
 RewriteRule ^title/([0-9]*)/?([a-z0-9-_]*)/?$ ./handler/title.php?id=$1
+RewriteRule ^browse/?$ ./handler/browse.php
 
 # Publisher stuff
 RewriteRule ^publisher/?$ ./handler/publisher.home.php

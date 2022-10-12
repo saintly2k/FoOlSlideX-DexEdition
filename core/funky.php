@@ -41,11 +41,10 @@ function callFile($file)
 function cat($title, $type = "title")
 {
     // This function is used, to make all titles readable for the URL and links
+    $title = str_replace("&", "et", str_replace(' ', '-', strtolower($title)));
     if ($type == "title") {
-        $title = str_replace("&", "et", str_replace(' ', '-', strtolower($title)));
-        return preg_replace('/[^A-Za-z0-9\-_]/', '', $title);
+        return preg_replace('/[^A-Za-z0-9\-]/', '', $title);
     } elseif ($type == "username") {
-        $title = str_replace("&", "et", str_replace(' ', '-', $title));
         return preg_replace('/[^A-Za-z0-9\-_]/', '', $title);
     }
 }
@@ -57,6 +56,37 @@ function formatDate($date)
     $s = $date;
     $date = strtotime($s);
     return date('d. M Y', $date);
+}
+
+function timeAgo($datetime, $full = false)
+{
+    // Thx - https://stackoverflow.com/questions/1416697/converting-timestamp-to-time-ago-in-php-e-g-1-day-ago-2-days-ago
+    $now = new DateTime;
+    $ago = new DateTime($datetime);
+    $diff = $now->diff($ago);
+
+    $diff->w = floor($diff->d / 7);
+    $diff->d -= $diff->w * 7;
+
+    $string = array(
+        'y' => 'year',
+        'm' => 'month',
+        'w' => 'week',
+        'd' => 'day',
+        'h' => 'hour',
+        'i' => 'minute',
+        's' => 'second',
+    );
+    foreach ($string as $k => &$v) {
+        if ($diff->$k) {
+            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+        } else {
+            unset($string[$k]);
+        }
+    }
+
+    if (!$full) $string = array_slice($string, 0, 1);
+    return $string ? implode(', ', $string) . ' ago' : 'just now';
 }
 
 function shorten($text, $maxlength = 25)
@@ -136,8 +166,6 @@ function getBrowser()
     $bname = 'Unknown';
     $platform = 'Unknown';
     $version = "";
-
-    //First get the platform?
     if (preg_match('/linux/i', $uAgent)) {
         $platform = 'linux';
     } elseif (preg_match('/macintosh|mac os x/i', $uAgent)) {
@@ -145,8 +173,6 @@ function getBrowser()
     } elseif (preg_match('/windows|win32/i', $uAgent)) {
         $platform = 'windows';
     }
-
-    // Next get the name of the useragent yes seperately and for good reason
     if (preg_match('/MSIE/i', $uAgent) && !preg_match('/Opera/i', $uAgent)) {
         $bname = 'Internet Explorer';
         $ub = "MSIE";
@@ -172,19 +198,14 @@ function getBrowser()
         $bname = 'Internet Explorer';
         $ub = "MSIE";
     }
-
-    // finally get the correct version number
     $known = array('Version', $ub, 'other');
     $pattern = '#(?<browser>' . join('|', $known) .
         ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
     if (!preg_match_all($pattern, $uAgent, $matches)) {
         // we have no matching number just continue
     }
-    // see how many we have
     $i = count($matches['browser']);
     if ($i != 1) {
-        //we will have two since we are not using 'other' argument yet
-        //see if version is before or after the name
         if (strripos($uAgent, "Version") < strripos($uAgent, $ub)) {
             $version = $matches['version'][0];
         } else {
@@ -196,7 +217,6 @@ function getBrowser()
     if ($version == null || $version == "") {
         $version = "?";
     }
-
     return array(
         'userAgent' => $uAgent,
         'name'      => $bname,
@@ -223,4 +243,31 @@ function asteristk($string, $amount = 5)
 {
     $asterisks = str_repeat("*", $amount);
     return preg_replace('/.{' . $amount . '}$/', $asterisks, $string);
+}
+
+function getLastChData($tid)
+{
+    require("config.php");
+    require("conn.php");
+    $chapter = $conn->query("SELECT `id`,`name`,`timestamp` FROM `chapters` WHERE `title_id`='$tid' ORDER BY `order` DESC LIMIT 1")->fetch_assoc();
+    if (empty($chapter["id"])) {
+        $chapter["id"] = "";
+        $chapter["name"] = "";
+        $chapter["timestamp"] = "";
+        $user["id"] = 0;
+        $user["username"] = "";
+    } else {
+        $user = $conn->query("SELECT `id`,`username` FROM `user` WHERE `id`='" . $chapter["user_id"] . "' LIMIT 1")->fetch_assoc();
+    }
+    return array(
+        "chapter" => array(
+            "id" => $chapter["id"],
+            "name" => $chapter["name"],
+            "time" => $chapter["timestamp"]
+        ),
+        "user" => array(
+            "id" => $user["id"],
+            "name" => $user["username"]
+        )
+    );
 }
