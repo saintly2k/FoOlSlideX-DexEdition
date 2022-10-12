@@ -41,7 +41,7 @@ $result = $conn->query("SELECT * FROM `titles` $order LIMIT " . $page_first_resu
             <div class="col-span-1 grid grid-cols-3 gap-2">
                 <div class="col-span-1">
                     <a href="<?= config("url") ?>title/<?= $title["id"] ?>/<?= cat($title["title"]) ?>">
-                        <img src="<?= config("url") ?>data/covers/<?= $title["id"] ?>.jpeg" class="w-full rounded" alt="Cover">
+                        <img src="<?= config("url") ?>data/covers/<?= $title["id"] ?>.jpeg" class="w-full rounded shadow-xl" alt="Cover">
                     </a>
                 </div>
                 <div class="col-span-2 p-1 pt-2">
@@ -61,11 +61,11 @@ $result = $conn->query("SELECT * FROM `titles` $order LIMIT " . $page_first_resu
                     <?php if (!empty($lc["chapter"]["id"])) { ?>
                         <div class="grid grid-cols-3 gap-2">
                             <div class="col-span-1 text-left">
-                                <a href="<?= config("url") ?>chapter/<?= $lc["chapter"]["id"] ?>" class="text-blue-500 hover:underline"><?= $lc["chapter"]["name"] ?></a>
+                                <a href="<?= config("url") ?>chapter/<?= $lc["chapter"]["id"] ?>" class="text-blue-500 hover:underline"><?= chTtile("home", $lc["chapter"]["volume"], $lc["chapter"]["chapter"], $lc["chapter"]["name"], $lc["chapter"]["short"], $lc["chapter"]["title"]) ?></a>
                             </div>
                             <div class="col-span-1 text-right flex justify-end items-right">
                                 <a href="<?= config("url") ?>user/<?= $lc["user"]["id"] ?>/<?= cat($lc["user"]["name"], "username") ?>">
-                                    <img src="<?= config("url") ?>data/user/<?= $lc["user"]["id"] ?>.jpeg" class="w-5 rounded-full" title="<?= $lc["user"]["name"] ?>'s Avatar" alt="Avatar">
+                                    <img src="<?= config("url") ?>data/user/<?= $lc["user"]["id"] ?>.png" class="w-6 rounded-full" title="<?= $lc["user"]["name"] ?>'s Avatar" alt="Avatar">
                                 </a>
                             </div>
                             <div class="col-span-1 text-center just">

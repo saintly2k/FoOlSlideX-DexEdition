@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 12. Okt 2022 um 13:57
+-- Erstellungszeit: 12. Okt 2022 um 22:10
 -- Server-Version: 10.4.22-MariaDB
 -- PHP-Version: 7.4.27
 
@@ -31,11 +31,17 @@ CREATE TABLE `chapters` (
   `id` int(11) NOT NULL,
   `title_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `order` int(11) NOT NULL,
-  `name` varchar(100) DEFAULT NULL,
+  `order` decimal(6,1) NOT NULL,
+  `volume` int(11) DEFAULT NULL,
+  `chapter` decimal(6,1) DEFAULT NULL,
+  `release_name` varchar(100) DEFAULT NULL,
+  `release_short` varchar(15) DEFAULT NULL,
+  `title` varchar(200) DEFAULT NULL,
+  `groups` text DEFAULT NULL,
   `data_path` text NOT NULL,
   `awaiting_approval` tinyint(1) NOT NULL DEFAULT 0,
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `key` text NOT NULL,
   `timestamp` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -74,7 +80,8 @@ INSERT INTO `config` (`id`, `name`, `value`) VALUES
 (16, 'display_credits', '1'),
 (17, 'logs', '0'),
 (18, 'defaultlevel', '100'),
-(19, 'guestlevel', '1');
+(19, 'guestlevel', '1'),
+(20, 'max_upload_mb', '50');
 
 -- --------------------------------------------------------
 
@@ -359,7 +366,7 @@ ALTER TABLE `chapters`
 -- AUTO_INCREMENT für Tabelle `config`
 --
 ALTER TABLE `config`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT für Tabelle `groups`

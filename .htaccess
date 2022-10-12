@@ -12,7 +12,7 @@ RewriteRule ^browse/?$ ./handler/browse.php
 # Publisher stuff
 RewriteRule ^publisher/?$ ./handler/publisher.home.php
 RewriteRule ^publisher/home/?$ ./handler/publisher.home.php?tab=home
-RewriteRule ^publisher/title/([0-9]*)/upload/?$ ./handler/publisher.title.upload.php?id=$1
+RewriteRule ^publisher/title/([0-9]*)/upload/?([0-9,]*)/?$ ./handler/publisher.title.upload.php?id=$1&groups=$2
 RewriteRule ^publisher/title/([0-9]*)/chapters/?$ ./handler/publisher.title.chapters.php?id=$1
 RewriteRule ^publisher/title/([0-9]*)/edit/?$ ./handler/publisher.title.edit.php?id=$1
 RewriteRule ^publisher/title/([0-9]*)/permission/?$ ./handler/publisher.title.permission.php?id=$1

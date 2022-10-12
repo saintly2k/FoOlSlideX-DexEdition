@@ -28,7 +28,7 @@ $can_edit = $permission_edit["user_id"] == 0 || in_array($user["id"], explode(",
         </p>
         <p><a href="<?= config("url") ?>title/<?= $title["id"] ?>/<?= cat($title["title"]) ?>" target="_blank" class="text-blue-500 hover:underline">#<?= $title["id"] ?></a></p>
         <p class="text-3xl"><a href="<?= config("url") ?>title/<?= $title["id"] ?>/<?= cat($title["title"]) ?>" target="_blank" class="text-blue-500 hover:underline"><?= $title["title"] ?></a></p>
-        <p class="text-gray-500">Created by <?= getUser($title["user_id"], "html") ?> on <?= $title["timestamp"] ?></p>
+        <p class="text-gray-500">Created by <a href="<?= config("url") ?>user/<?= $title["user_id"] ?>/<?= cat(getUser($title["user_id"])["name"], "username") ?>" class="text-blue-500 hover:underline"><?= getUser($title["user_id"])["name"] ?></a> on <?= $title["timestamp"] ?></p>
         <hr class="my-2">
         <div class="mb-2">
             <?php if ($can_upload == true || $user["id"] == $title["user_id"]) { ?>

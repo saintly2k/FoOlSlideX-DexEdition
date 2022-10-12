@@ -3,7 +3,7 @@
 require("../../load.php");
 
 $popular_titles = $conn->query("SELECT * FROM `titles` ORDER BY `id` DESC LIMIT " . config("home_display_titles"));
-$latest_chapters = $conn->query("SELECT * FROM `chapters` ORDER BY `id` DESC LIMIT " . config("home_display_chapters"));
+$latest_chapters = $conn->query("SELECT * FROM `chapters` WHERE `awaiting_approval`=0 AND `deleted`=0 ORDER BY `id` DESC LIMIT " . config("home_display_chapters"));
 
 ?>
 
@@ -25,32 +25,41 @@ $latest_chapters = $conn->query("SELECT * FROM `chapters` ORDER BY `id` DESC LIM
     <h1 class="text-2xl border-b mb-1"><?= $lang["recent_chapters"] ?></h1>
     <div class="grid grid-cols-3 gap-2">
         <?php foreach ($latest_chapters as $chapter) { ?>
+            <?php $title = $conn->query("SELECT * FROM `titles` WHERE `id`='" . $chapter["title_id"] . "' LIMIT 1")->fetch_assoc(); ?>
+            <?php $lu = $conn->query("SELECT * FROM `user` WHERE `id`='" . $chapter["user_id"] . "' LIMIT 1")->fetch_assoc(); ?>
+            <?php $genre = explode(", ", $title["genre"]); ?>
             <div class="col-span-1 grid grid-cols-3 gap-2">
-                <div role="status" class="animate-pulse">
-                    <div class="flex justify-center items-center w-full h-48 bg-gray-300 rounded">
-                        <svg class="w-12 h-12 text-gray-200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" viewBox="0 0 640 512">
-                            <path d="M480 80C480 35.82 515.8 0 560 0C604.2 0 640 35.82 640 80C640 124.2 604.2 160 560 160C515.8 160 480 124.2 480 80zM0 456.1C0 445.6 2.964 435.3 8.551 426.4L225.3 81.01C231.9 70.42 243.5 64 256 64C268.5 64 280.1 70.42 286.8 81.01L412.7 281.7L460.9 202.7C464.1 196.1 472.2 192 480 192C487.8 192 495 196.1 499.1 202.7L631.1 419.1C636.9 428.6 640 439.7 640 450.9C640 484.6 612.6 512 578.9 512H55.91C25.03 512 .0006 486.1 .0006 456.1L0 456.1z" />
-                        </svg>
-                    </div>
+                <div class="col-span-1">
+                    <a href="<?= config("url") ?>title/<?= $title["id"] ?>/<?= cat($title["title"]) ?>">
+                        <img src="<?= config("url") ?>data/covers/<?= $title["id"] ?>.jpeg" class="w-full rounded shadow-xl" alt="Cover">
+                    </a>
                 </div>
-                <div class="col-span-2">
-                    <div class="h-4 bg-gray-200 rounded-full mt-1 w-1/2"></div>
-                    <hr class="p-1 opacity-0">
-                    <div class="h-2.5 bg-gray-200 rounded-full mt-1 w-full"></div>
-                    <div class="h-2.5 bg-gray-200 rounded-full mt-1 w-full"></div>
-                    <hr class="p-1 opacity-0">
+                <div class="col-span-2 p-1 pt-2">
+                    <a href="<?= config("url") ?>title/<?= $title["id"] ?>/<?= cat($title["title"]) ?>" class="font-bold hover:underline">
+                        <?= $title["title"] ?>
+                    </a>
+                    <p>
+                        <?php
+                        $c = 1;
+                        foreach ($genre as $g) {
+                            if ($c != 1) echo ", ";
+                            echo "<a href='" . config("url") . "search?genre=$g' class='hover:underline text-blue-500'>$g</a>";
+                            $c++;
+                        }
+                        ?>
+                    </p>
                     <div class="grid grid-cols-3 gap-2">
                         <div class="col-span-1 text-left">
-                            <div class="h-2.5 bg-gray-200 rounded-full mt-1 w-1/2"></div>
+                            <a href="<?= config("url") ?>chapter/<?= $chapter["id"] ?>" class="text-blue-500 hover:underline"><?= chTtile("home", $chapter["volume"], $chapter["chapter"], $chapter["release_name"], $chapter["release_short"], $chapter["title"]) ?></a>
                         </div>
                         <div class="col-span-1 text-right flex justify-end items-right">
-                            <div class="h-5 w-5 bg-gray-300 rounded-full flex justify-center items-center">
-                                <svg class="w-3 h-3 text-gray-200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" viewBox="0 0 640 512">
-                                    <path d="M480 80C480 35.82 515.8 0 560 0C604.2 0 640 35.82 640 80C640 124.2 604.2 160 560 160C515.8 160 480 124.2 480 80zM0 456.1C0 445.6 2.964 435.3 8.551 426.4L225.3 81.01C231.9 70.42 243.5 64 256 64C268.5 64 280.1 70.42 286.8 81.01L412.7 281.7L460.9 202.7C464.1 196.1 472.2 192 480 192C487.8 192 495 196.1 499.1 202.7L631.1 419.1C636.9 428.6 640 439.7 640 450.9C640 484.6 612.6 512 578.9 512H55.91C25.03 512 .0006 486.1 .0006 456.1L0 456.1z" />
-                                </svg>
-                            </div>
+                            <a href="<?= config("url") ?>user/<?= $lu["id"] ?>/<?= cat($lu["username"], "username") ?>">
+                                <img src="<?= config("url") ?>data/user/<?= $lu["id"] ?>.png" class="w-6 rounded-full" title="<?= $lu["username"] ?>'s Avatar" alt="Avatar">
+                            </a>
                         </div>
-                        <div class="h-2.5 bg-gray-200 rounded-full mt-1 w-full"></div>
+                        <div class="col-span-1 text-right">
+                            <?= timeAgo($chapter["timestamp"]) ?>
+                        </div>
                     </div>
                 </div>
             </div>

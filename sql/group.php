@@ -7,7 +7,7 @@ function checkGroupFormData($name, $uplperms, $editperms, $status, $owner, $redi
     $error = false;
     $out = "error";
     $nl = strlen($name);
-    if ($nl < 9 || $nl > 101) {
+    if ($nl < 4 || $nl > 101) {
         $error = true;
         $out = "Name of Group needds to be between 10 and 100 characters.";
     }

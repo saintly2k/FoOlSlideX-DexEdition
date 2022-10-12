@@ -49,13 +49,17 @@ function cat($title, $type = "title")
     }
 }
 
-function formatDate($date)
+function formatDate($date, $full = false)
 {
     $date = clean($date);
 
     $s = $date;
     $date = strtotime($s);
-    return date('d. M Y', $date);
+    if ($full == false) {
+        return date('d. M Y', $date);
+    } else {
+        return date('d. M Y H:m:i', $date);
+    }
 }
 
 function timeAgo($datetime, $full = false)
@@ -74,7 +78,7 @@ function timeAgo($datetime, $full = false)
         'w' => 'week',
         'd' => 'day',
         'h' => 'hour',
-        'i' => 'minute',
+        'i' => 'min',
         's' => 'second',
     );
     foreach ($string as $k => &$v) {
@@ -120,24 +124,50 @@ function convertUpload($n)
     return $out;
 }
 
-function getUser($uid, $type = "plain")
+function getUser($uid)
 {
     // This function is used to get the name of the user
     require("config.php");
     require("conn.php");
     if ($uid == 0) {
-        if ($type == "plain") $out = "System";
-        if ($type == "html") $out =  "<a href='#/' class='text-blue-500 hover:underline'>System</a>";
+        return "System";
     } else {
         $u = $conn->query("SELECT * FROM `user` WHERE `id`='$uid' LIMIT 1")->fetch_assoc();
         if (empty($u["id"])) {
-            $out = "Unknown";
+            return "Unknown";
         } else {
-            if ($type == "plain") $out = $u["username"];
-            if ($type == "html") $out = "<a href='" . config("url") . "user/" . $u["id"] . "/" . cat($u["username"]) . "' class='text-blue-500 hover:underline'>" . $u["username"] . "</a>";
+            return array(
+                "id" => $u["id"],
+                "name" => $u["username"]
+            );
         }
     }
-    return $out;
+}
+
+function getGroup($gid)
+{
+    // This function is used to get the name of the user
+    require("config.php");
+    require("conn.php");
+    if (!empty($gid)) {
+        $g = $conn->query("SELECT * FROM `groups` WHERE `id`='$gid' LIMIT 1")->fetch_assoc();
+        if (empty($g["id"])) {
+            return array(
+                "id" => 0,
+                "name" => "Unknown"
+            );
+        } else {
+            return array(
+                "id" => $g["id"],
+                "name" => $g["name"]
+            );
+        }
+    } else {
+        return array(
+            "id" => "",
+            "name" => ""
+        );
+    }
 }
 
 function getIpAddress()
@@ -160,6 +190,32 @@ function genUsername()
         mt_rand(0, 0xffff)
     );
 }
+
+function chTtile($type, $volume, $chapter, $name, $short, $title)
+{
+    $out = "";
+    if (substr($chapter, -2) == ".0") {
+        $chapter = substr($chapter, 0, -2);
+    }
+    if ($type == "home") {
+        if (!empty($volume)) $out .= "Vol." . $volume . " ";
+        $out .= "Ch." . $chapter;
+    }
+    if ($type == "list") {
+        if (!empty($name)) {
+            $out = $name;
+        } else {
+            if (!empty($volume)) $out .= "Volume " . $volume . " ";
+            $out .= "Chapter " . $chapter;
+            if (!empty($title)) $out .= ": " . $title;
+            if ($short == "a") {
+                //x
+            }
+        }
+    }
+    return $out;
+}
+
 function getBrowser()
 {
     $uAgent = $_SERVER['HTTP_USER_AGENT'];
@@ -249,25 +305,48 @@ function getLastChData($tid)
 {
     require("config.php");
     require("conn.php");
-    $chapter = $conn->query("SELECT `id`,`name`,`timestamp` FROM `chapters` WHERE `title_id`='$tid' ORDER BY `order` DESC LIMIT 1")->fetch_assoc();
+    $chapter = $conn->query("SELECT * FROM `chapters` WHERE `title_id`='$tid' ORDER BY `order` DESC LIMIT 1")->fetch_assoc();
     if (empty($chapter["id"])) {
         $chapter["id"] = "";
-        $chapter["name"] = "";
+        $chapter["volume"] = "";
+        $chapter["chapter"] = "";
+        $chapter["release_name"] = "";
+        $chapter["release_short"] = "";
+        $chapter["title"] = "";
         $chapter["timestamp"] = "";
         $user["id"] = 0;
         $user["username"] = "";
     } else {
-        $user = $conn->query("SELECT `id`,`username` FROM `user` WHERE `id`='" . $chapter["user_id"] . "' LIMIT 1")->fetch_assoc();
+        $user = $conn->query("SELECT `id`, `username` FROM `user` WHERE `id`='" . $chapter["user_id"] . "' LIMIT 1")->fetch_assoc();
     }
     return array(
         "chapter" => array(
             "id" => $chapter["id"],
-            "name" => $chapter["name"],
+            "volume" => $chapter["volume"],
+            "chapter" => $chapter["chapter"],
+            "name" => $chapter["release_name"],
+            "short" => $chapter["release_short"],
+            "title" => $chapter["title"],
             "time" => $chapter["timestamp"]
         ),
         "user" => array(
             "id" => $user["id"],
             "name" => $user["username"]
         )
+    );
+}
+
+function gen_uuid()
+{
+    return sprintf(
+        '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+        mt_rand(0, 0xffff),
+        mt_rand(0, 0xffff),
+        mt_rand(0, 0xffff),
+        mt_rand(0, 0x0C2f) | 0x4000,
+        mt_rand(0, 0x3fff) | 0x8000,
+        mt_rand(0, 0x2Aff),
+        mt_rand(0, 0xffD3),
+        mt_rand(0, 0xff4B)
     );
 }

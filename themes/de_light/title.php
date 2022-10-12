@@ -10,6 +10,7 @@ if (!empty($title["id"])) {
     $artists = explode(", ", $title["artists"]);
     $genre = explode(", ", $title["genre"]);
     $resources = $conn->query("SELECT * FROM `resources` WHERE `title_id`='$id' ORDER BY `name` ASC");
+    $chapters = $conn->query("SELECT * FROM `chapters` WHERE `title_id`='$id' ORDER BY `order` DESC");
 } else {
     $error = true;
 }
@@ -95,7 +96,36 @@ if ($error == false) {
     </div>
 
     <div class="col-span-12">
-        Chapters list
+        <h2 class="text-xl font-bold underline">Chapters</h2>
+        <?php foreach ($chapters as $ch) { ?>
+            <?php $groups = explode(",", $ch["groups"]); ?>
+            <div class="border border-black p-1 grid grid-cols-8 hover:bg-gray-100">
+                <p class="col-span-4 font-bold">
+                    <a href="<?= config("url") ?>chapter/<?= $ch["id"] ?>" class="text-blue-700 hover:underline">
+                        <?= chTtile("list", $ch["volume"], $ch["chapter"], $ch["release_name"], $ch["release_short"], $ch["title"]) ?>
+                    </a>
+                </p>
+                <div class="col-span-2 text-center">
+                    <?php $gc = 1;
+                    if (!empty($groups)) {
+                        foreach ($groups as $group) {
+                            if ($gc != 1) echo ", ";
+                            echo "<a href='" . config("url") . "group/$group/" . cat(getGroup($group, "username")["name"]) . "' class='text-blue-500 hover:underline'>" . getGroup($group)["name"] . "</a>";
+                            $gc++;
+                        }
+                    } ?>
+                </div>
+                <div class="col-span-1 text-center">
+                    <a href="<?= config("url") ?>user/<?= $ch["user_id"] ?>/<?= cat(getUser($ch["user_id"])["name"], "username") ?>" class="text-blue-500 hover:underline flex">
+                        <img src="<?= config("url") ?>data/user/<?= $ch["user_id"] ?>.png" class="w-6 mr-1 rounded-full" alt="Avatar">
+                        <?= getUser($ch["user_id"])["name"] ?>
+                    </a>
+                </div>
+                <div class="col-span-1 text-right">
+                    <?= formatDate($ch["timestamp"], true) ?>
+                </div>
+            </div>
+        <?php } ?>
     </div>
 
     <div class="col-span-12">
