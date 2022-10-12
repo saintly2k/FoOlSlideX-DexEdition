@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 12. Okt 2022 um 01:18
+-- Erstellungszeit: 12. Okt 2022 um 13:57
 -- Server-Version: 10.4.22-MariaDB
 -- PHP-Version: 7.4.27
 
@@ -30,9 +30,9 @@ SET time_zone = "+00:00";
 CREATE TABLE `chapters` (
   `id` int(11) NOT NULL,
   `title_id` int(11) NOT NULL,
-  `volume` int(11) NOT NULL,
-  `chapter` decimal(10,0) NOT NULL,
   `user_id` int(11) NOT NULL,
+  `order` int(11) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
   `data_path` text NOT NULL,
   `awaiting_approval` tinyint(1) NOT NULL DEFAULT 0,
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
@@ -86,11 +86,11 @@ CREATE TABLE `groups` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `description` text DEFAULT NULL,
-  `permission` text NOT NULL,
-  `modify` text NOT NULL,
+  `permission` text DEFAULT NULL,
+  `modify` text DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
-  `owner` int(11) NOT NULL,
-  `redirect` int(11) NOT NULL,
+  `owner` int(11) DEFAULT NULL,
+  `redirect` int(11) DEFAULT NULL,
   `creator` int(11) NOT NULL,
   `timestamp` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
