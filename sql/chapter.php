@@ -111,26 +111,28 @@ function verifyGroups($groups, $uid, $mod)
     require("../core/conn.php");
     $out = "";
     $c = 1;
-    $groups = explode(",", $groups);
-    foreach ($groups as $group) {
-        $group = $conn->query("SELECT * FROM `groups` WHERE `id`='$group' LIMIT 1")->fetch_assoc();
-        if (!empty($group["id"]) || ($group["status"] != 1 || $group["status"] != 3)) {
-            if ($group["permission"] == 0) {
-                $post = true;
-            } else {
-                $x = explode(",", $group["permission"]);
-                if (in_array($uid, $x) || $mod == 1) {
+    if (!empty($groups)) {
+        $groups = explode(",", $groups);
+        foreach ($groups as $group) {
+            $group = $conn->query("SELECT * FROM `groups` WHERE `id`='$group' LIMIT 1")->fetch_assoc();
+            if (!empty($group["id"]) || ($group["status"] != 1 || $group["status"] != 3)) {
+                if ($group["permission"] == 0) {
                     $post = true;
                 } else {
-                    $post = false;
+                    $x = explode(",", $group["permission"]);
+                    if (in_array($uid, $x) || $mod == 1) {
+                        $post = true;
+                    } else {
+                        $post = false;
+                    }
                 }
+            } else {
+                $post = false;
             }
-        } else {
-            $post = false;
+            $d = $c != 1 ? ", " . $group["id"] : $group["id"];
+            if ($post == true) $out .= $d;
+            $c++;
         }
-        $d = $c != 1 ? ", " . $group["id"] : $group["id"];
-        if ($post == true) $out .= $d;
-        $c++;
     }
     return $out;
 }

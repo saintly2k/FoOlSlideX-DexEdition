@@ -25,4 +25,5 @@ $lang["upload_status"] = "Upload Status";
 $lang["year_of_release"] = "Year of Release";
 $lang["year_of_completion"] = "Year of Completion";
 $lang["summary"] = "Summary";
+$lang["notes"] = "Notes";
 $lang["resources"] = "Resources";

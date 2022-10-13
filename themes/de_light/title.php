@@ -81,6 +81,10 @@ if ($error == false) {
                 <h2 class="text-xl font-bold underline"><?= $lang["summary"] ?></h2>
                 <p class="just"><?= $title["summary"] ?></p>
             <?php } ?>
+            <?php if (!empty($title["notes"])) { ?>
+                <h2 class="text-xl font-bold underline"><?= $lang["notes"] ?></h2>
+                <p class="just"><?= $title["notes"] ?></p>
+            <?php } ?>
             <h2 class="text-xl font-bold underline"><?= $lang["resources"] ?></h2>
             <?php if (mysqli_num_rows($resources) != 0) {
                 $c = 1;

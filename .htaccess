@@ -8,6 +8,8 @@ RewriteRule ^home/?$ ./handler/home.php
 # Titles stuff
 RewriteRule ^title/([0-9]*)/?([a-z0-9-_]*)/?$ ./handler/title.php?id=$1
 RewriteRule ^browse/?$ ./handler/browse.php
+RewriteRule ^chapter/([0-9]*)/?$ ./handler/chapter.php?id=$1
+RewriteRule ^chapter/([0-9]*)/([0-9]*)/?$ ./handler/chapter.php?id=$1&page=$2
 
 # Publisher stuff
 RewriteRule ^publisher/?$ ./handler/publisher.home.php
