@@ -350,3 +350,25 @@ function gen_uuid()
         mt_rand(0, 0xff4B)
     );
 }
+
+function setCkie($name, $value, $expires = "never")
+{
+    if ($expires == "never") {
+        $time = time() + (10 * 365 * 24 * 60 * 60);
+    } else {
+        $time = $expires;
+    }
+    setcookie($name, $value, $time, "/");
+}
+
+function convArrayToString($array)
+{
+    $out = "";
+    $c = 1;
+    foreach ($array as $a) {
+        if ($c != 1) $out .= ",";
+        $out .= $a;
+        $c++;
+    }
+    return $out;
+}

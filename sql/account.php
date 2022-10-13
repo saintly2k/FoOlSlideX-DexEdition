@@ -77,7 +77,7 @@ function tryLogin($email, $password)
                 $browserDetails = $browser["userAgent"];
                 $browser = $browser["name"] . " " . $browser["version"] . ", " . ucfirst($browser["platform"]);
                 $conn->query("INSERT INTO `sessions`(`user`,`token`,`browser`,`browser_details`,`ip`) VALUES('" . $user["id"] . "','$token','$browser','$browserDetails','$ip')");
-                setcookie(config("cookie") . "_session", $token, time() + (86400 * 30), "/");
+                setcookie(config("cookie") . "_session", $token, time() + (10 * 365 * 24 * 60 * 60), "/");
                 $out = "success";
                 logs($user["id"], "tryLogin", "Not Loggedin", "success");
             }

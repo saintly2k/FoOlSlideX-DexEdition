@@ -103,7 +103,7 @@ if ($error == false) {
         <h2 class="text-xl font-bold underline">Chapters</h2>
         <?php foreach ($chapters as $ch) { ?>
             <?php $groups = explode(",", $ch["groups"]); ?>
-            <div class="border border-black p-1 grid grid-cols-8 hover:bg-gray-100">
+            <div class="border border-black p-1 grid grid-cols-8 <?= in_array($ch["id"], $userreadchapters) ? "text-blue-500 bg-blue-200 hover:bg-blue-400 font-bold" : "hover:bg-gray-100" ?>">
                 <p class="col-span-4 font-bold">
                     <a href="<?= config("url") ?>chapter/<?= $ch["id"] ?>" class="text-blue-700 hover:underline">
                         <?= chTtile("list", $ch["volume"], $ch["chapter"], $ch["release_name"], $ch["release_short"], $ch["title"]) ?>
