@@ -5,6 +5,17 @@ require("core/config.php");
 require("core/conn.php");
 require("core/funky.php");
 require("core/user.php");
+require("core/custom.php");
+
+if (config("debug") == 1) {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+} else {
+    error_reporting(0);
+    ini_set('display_errors', 0);
+}
+
+if (in_array($_SERVER['HTTP_X_FORWARDED_FOR'], $banned_ips) || in_array($_SERVER['REMOTE_ADDR'], $banned_ips) || in_array($_SERVER["HTTP_CF_CONNECTING_IP"], $banned_ips)) die("You are banned because of abnormal behaviour (indicating you are maybe a Bot or someone with malicious intent). Please contact the administration if it's a bug.");
 
 // Get all Cookies, etc
 $usertheme = isset($_COOKIE[config("cookie") . "_theme"]) ? clean(mysqli_real_escape_string($conn, $_COOKIE[config("cookie") . "_theme"])) : config("default_theme");

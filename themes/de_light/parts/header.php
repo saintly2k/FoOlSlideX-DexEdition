@@ -48,6 +48,32 @@
         function title(title) {
             document.title = title + " - <?= config("title") ?>";
         }
+
+        function scroolTo(element, duration) {
+            if (!duration) {
+                duration = 700;
+            }
+            if (!element.offsetParent) {
+                element.scrollTo();
+            }
+            var startingTop = element.offsetParent.scrollTop;
+            var elementTop = element.offsetTop;
+            var dist = elementTop - startingTop;
+            var start;
+
+            window.requestAnimationFrame(function step(timestamp) {
+                if (!start)
+                    start = timestamp;
+                var time = timestamp - start;
+                var percent = Math.min(time / duration, 1);
+                element.offsetParent.scrollTo(0, startingTop + dist * percent);
+
+                // Proceed with animation as long as we wanted it to.
+                if (time < duration) {
+                    window.requestAnimationFrame(step);
+                }
+            })
+        }
     </script>
 
     <style>

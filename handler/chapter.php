@@ -13,23 +13,23 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"]) || empty($_GET["id"])) {
         $chapters = $conn->query("SELECT * FROM `chapters` WHERE `title_id`='" . $chapter["title_id"] . "' ORDER BY `order` DESC");
         $title = $conn->query("SELECT * FROM `titles` WHERE `id`='" . $chapter["title_id"] . "' LIMIT 1")->fetch_assoc();
         $ptit = chTtile("home", $chapter["volume"], $chapter["chapter"], $chapter["release_name"], $chapter["release_short"], $chapter["title"]);
+        $ptitf = chTtile("list", $chapter["volume"], $chapter["chapter"], $chapter["release_name"], $chapter["release_short"], $chapter["title"]);
         $images = glob("../data/chapters/" . $chapter["data_path"] . "/*");
         natsort($images);
         $prev_page = $conn->query("SELECT * FROM `chapters` WHERE `title_id`='" . $chapter["title_id"] . "' AND `order` < '" . $chapter["order"] . "' ORDER BY `order` DESC LIMIT 1")->fetch_assoc();
         $next_page = $conn->query("SELECT * FROM `chapters` WHERE `title_id`='" . $chapter["title_id"] . "' AND `order` > '" . $chapter["order"] . "' ORDER BY `order` ASC LIMIT 1")->fetch_assoc();
-        if ($readingmode == "singlePage") {
-            $imgind = [];
-            $ic = 1;
-            foreach ($images as $ii) {
-                $ii = pathinfo($ii);
-                $imgind[$ic]["order"] = $ic;
-                $imgind[$ic]["name"] = $ii["filename"];
-                $imgind[$ic]["ext"] = $ii["extension"];
-                $ic++;
-            }
-            $page = clean(mysqli_real_escape_string($conn, $_GET["page"]));
-            $next_img = $page < $ic - 1 ? $page + 1 : $page;
+        $imgind = [];
+        $ic = 1;
+        foreach ($images as $ii) {
+            $ii = pathinfo($ii);
+            $imgind[$ic]["order"] = $ic;
+            $imgind[$ic]["name"] = $ii["filename"];
+            $imgind[$ic]["ext"] = $ii["extension"];
+            $ic++;
         }
+        $page = clean(mysqli_real_escape_string($conn, $_GET["page"]));
+        $prev_img = $page > 1 ? $page - 1 : $page;
+        $next_img = $page < $ic - 1 ? $page + 1 : $page;
         if (!isset($_GET["page"]) && $readingmode == "singlePage") {
             header("Location: " . config("url") . "chapter/" . $id . "/1");
         }
