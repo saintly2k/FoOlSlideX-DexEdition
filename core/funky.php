@@ -366,9 +366,23 @@ function convArrayToString($array)
     $out = "";
     $c = 1;
     foreach ($array as $a) {
-        if ($c != 1) $out .= ",";
-        $out .= $a;
-        $c++;
+        if (is_numeric($a)) {
+            if ($c != 1) $out .= ",";
+            $out .= $a;
+            $c++;
+        }
+    }
+    return $out;
+}
+
+function convStringToArray($array)
+{
+    $out = [];
+    $array = explode(",", $array);
+    foreach ($array as $e) {
+        if (is_numeric($e)) {
+            array_push($out, $e);
+        }
     }
     return $out;
 }

@@ -27,3 +27,4 @@ $readingmode = isset($_COOKIE[config("cookie") . "_readingMode"]) ? clean(mysqli
 // Include default files
 require("languages/default/$userlang.def.php");
 if (file_exists("languages/custom/$userlang.cus.php")) require("languages/custom/$userlang.cus.php");
+if (file_exists("languages/custom/universal.php")) require("languages/custom/universal.php");

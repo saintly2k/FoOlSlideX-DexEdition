@@ -5,8 +5,8 @@ require("../sql/account.php");
 
 $error = false;
 
-if ($loggedin == true) {
-    header("Location: " . config("url") . "account/home");
+if ($loggedin == true || $userlevel["can_signup"] == 0) {
+    header("Location: " . config("url") . "home");
     $error = true;
     die("You don't have permissions to perform this action. Contact Administration for further details. (Also, you are ignoring headers, this isn't a good sign!)");
 }
