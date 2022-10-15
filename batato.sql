@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 12. Okt 2022 um 22:10
+-- Erstellungszeit: 15. Okt 2022 um 02:49
 -- Server-Version: 10.4.22-MariaDB
 -- PHP-Version: 7.4.27
 
@@ -81,7 +81,9 @@ INSERT INTO `config` (`id`, `name`, `value`) VALUES
 (17, 'logs', '0'),
 (18, 'defaultlevel', '100'),
 (19, 'guestlevel', '1'),
-(20, 'max_upload_mb', '50');
+(20, 'max_upload_mb', '50'),
+(21, 'default_readingmode', 'allPages'),
+(22, 'debug', '0');
 
 -- --------------------------------------------------------
 
@@ -105,6 +107,34 @@ CREATE TABLE `groups` (
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `history_chapters`
+--
+
+CREATE TABLE `history_chapters` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `array` text DEFAULT NULL,
+  `updated` datetime NOT NULL DEFAULT current_timestamp(),
+  `timestamp` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `history_titles`
+--
+
+CREATE TABLE `history_titles` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `array` text DEFAULT NULL,
+  `updated` datetime NOT NULL DEFAULT current_timestamp(),
+  `timestamp` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `levels`
 --
 
@@ -113,6 +143,7 @@ CREATE TABLE `levels` (
   `level` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `can_login` tinyint(1) NOT NULL,
+  `can_signup` tinyint(1) NOT NULL,
   `can_add_title` tinyint(1) NOT NULL,
   `can_add_group` tinyint(1) NOT NULL,
   `can_add_chapter` tinyint(1) NOT NULL,
@@ -132,13 +163,13 @@ CREATE TABLE `levels` (
 -- Daten für Tabelle `levels`
 --
 
-INSERT INTO `levels` (`id`, `level`, `name`, `can_login`, `can_add_title`, `can_add_group`, `can_add_chapter`, `can_edit_title`, `can_edit_group`, `can_edit_chapter`, `can_modify_chapters`, `can_edit_users`, `publisher`, `mod`, `admin`, `banned`, `timestamp`) VALUES
-(1, 1, 'Guest', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2022-10-12 00:39:01'),
-(2, 100, 'User', 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, '2022-10-12 00:39:20'),
-(3, 200, 'Uploader', 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, '2022-10-12 00:39:36'),
-(4, 500, 'Moderator', 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, '2022-10-12 00:39:49'),
-(5, 999, 'Administrator', 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, '2022-10-12 00:40:09'),
-(6, 5, 'Banned', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '2022-10-12 00:40:19');
+INSERT INTO `levels` (`id`, `level`, `name`, `can_login`, `can_signup`, `can_add_title`, `can_add_group`, `can_add_chapter`, `can_edit_title`, `can_edit_group`, `can_edit_chapter`, `can_modify_chapters`, `can_edit_users`, `publisher`, `mod`, `admin`, `banned`, `timestamp`) VALUES
+(1, 1, 'Guest', 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2022-10-12 00:39:01'),
+(2, 100, 'User', 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, '2022-10-12 00:39:20'),
+(3, 200, 'Uploader', 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, '2022-10-12 00:39:36'),
+(4, 500, 'Moderator', 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, '2022-10-12 00:39:49'),
+(5, 999, 'Administrator', 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, '2022-10-12 00:40:09'),
+(6, 5, 'Banned', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '2022-10-12 00:40:19');
 
 -- --------------------------------------------------------
 
@@ -299,6 +330,20 @@ ALTER TABLE `groups`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indizes für die Tabelle `history_chapters`
+--
+ALTER TABLE `history_chapters`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `user_id` (`user_id`);
+
+--
+-- Indizes für die Tabelle `history_titles`
+--
+ALTER TABLE `history_titles`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `user_id` (`user_id`);
+
+--
 -- Indizes für die Tabelle `levels`
 --
 ALTER TABLE `levels`
@@ -366,12 +411,24 @@ ALTER TABLE `chapters`
 -- AUTO_INCREMENT für Tabelle `config`
 --
 ALTER TABLE `config`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT für Tabelle `groups`
 --
 ALTER TABLE `groups`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT für Tabelle `history_chapters`
+--
+ALTER TABLE `history_chapters`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT für Tabelle `history_titles`
+--
+ALTER TABLE `history_titles`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
