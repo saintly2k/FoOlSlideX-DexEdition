@@ -28,8 +28,8 @@
     <form method="POST" name="addTitle" class="col-span-12 w-full" enctype="multipart/form-data">
         <div class="form-group mb-3">
             <label for="title" class="text-xl pl-5">Title <span class="text-gray-600">(Required)</span></label>
-            <input required type="text" minlength="10" maxlength="100" id="title" name="title" class="w-full" placeholder="Title of Comic" value="<?= isset($_POST["title"]) ? clean(mysqli_real_escape_string($conn, $_POST["title"])) : "" ?>">
-            <p class="text-gray-500 leading-none">This is the Title of the Comic. It needs to be between 10 and 100
+            <input required type="text" minlength="2" maxlength="100" id="title" name="title" class="w-full" placeholder="Title of Comic" value="<?= isset($_POST["title"]) ? clean(mysqli_real_escape_string($conn, $_POST["title"])) : "" ?>">
+            <p class="text-gray-500 leading-none">This is the Title of the Comic. It needs to be between 2 and 100
                 Characters. It may contain special Characters.</p>
         </div>
         <div class="form-group mb-3">

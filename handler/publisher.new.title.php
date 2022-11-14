@@ -41,6 +41,7 @@ if (isset($_POST["addTitle"])) {
             if ($return == "success") {
                 $return = uploadImage($comic["cover"]["tmp"], $comic["cover"]["file"], "../data/covers/" . $title["id"] . ".jpeg", $user["id"]);
                 if ($return == "success") {
+                    move_uploaded_file($_FILES["cover"]["tmp_name"], "../data/covers/" . $title["id"] . ".jpeg");
                     header("Location: " . config("url") . "publisher/title/" . $title["id"] . "/" . cat($title["title"]));
                     $serror = true;
                 } else {

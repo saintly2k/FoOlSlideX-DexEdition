@@ -317,7 +317,7 @@ function getLastChData($tid)
         $user["id"] = 0;
         $user["username"] = "";
     } else {
-        $user = $conn->query("SELECT `id`, `username` FROM `user` WHERE `id`='" . $chapter["user_id"] . "' LIMIT 1")->fetch_assoc();
+        $user = $conn->query("SELECT `id`, `username` FROM `{$dbp}user` WHERE `id`='" . $chapter["user_id"] . "' LIMIT 1")->fetch_assoc();
     }
     return array(
         "chapter" => array(
@@ -415,7 +415,7 @@ function uploadImage($imgTmp, $imgFile, $target, $uid)
     // Check if $uploadOk is set to 0 by an error
     if ($uploadOk == 1) {
         // if (rename($imgTmp, $targetFile)) {
-            $out = "success";
+        $out = "success";
         //     logs($uid, "uploadImage", "Not Uploaded", "success");
         // } else {
         //     $out = "An error occured - server sided, you're not at fault (I think).";

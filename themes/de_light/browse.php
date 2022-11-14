@@ -11,6 +11,7 @@ if ($orderBy == "created_asc") $order = "ORDER BY `timestamp` ASC";
 if ($orderBy == "created_desc") $order = "ORDER BY `timestamp` DESC";
 if ($orderBy == "released_asc") $order = "ORDER BY `release_year` ASC";
 if ($orderBy == "released_desc") $order = "ORDER BY `release_year` DESC";
+if (!isset($order) || empty($order)) $order = "";
 
 $results_per_page = 36;
 $result = $conn->query("SELECT * FROM `{$dbp}titles` $order");

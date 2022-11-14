@@ -105,7 +105,7 @@ function tryEditTitle($tid, $title2, $alt, $authors, $artists, $genre, $language
     if (config("logs") == 1) {
         $title = $conn->query("SELECT * FROM `{$dbp}titles` WHERE `id`='$tid' LIMIT 1")->fetch_assoc();
         $oldCover = "../data/old/covers/" . $title["id"] . ".jpeg";
-        $newCover = "/data/covers/" . $title["id"] . ".jpeg";
+        $newCover = "../data/covers/" . $title["id"] . ".jpeg";
         if (file_exists($oldCover)) {
             rename("../data/covers/" . $title["id"] . ".jpeg", $oldCover);
         }
