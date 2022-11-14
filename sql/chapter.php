@@ -93,7 +93,7 @@ function tryCreateChapter($tid, $uid, $order, $volume, $chapter, $name, $short, 
     require("../core/config.php");
     require("../core/conn.php");
     $out = "";
-    $sql = "INSERT INTO `chapters`(`title_id`, `user_id`, `order`, `volume`, `chapter`, `release_name`, `release_short`, `title`, `groups`, `data_path`, `awaiting_approval`, `deleted`, `key`)
+    $sql = "INSERT INTO `{$dbp}chapters`(`title_id`, `user_id`, `order`, `volume`, `chapter`, `release_name`, `release_short`, `title`, `groups`, `data_path`, `awaiting_approval`, `deleted`, `key`)
     VALUES ('$tid','$uid','$order','$volume','$chapter','$name','$short','$title','$groups','$data','$awaiting','$deleted','$key')";
     if (!$conn->query($sql)) {
         $out = "MySQL Error: " . $conn->error;
@@ -114,7 +114,7 @@ function verifyGroups($groups, $uid, $mod)
     if (!empty($groups)) {
         $groups = explode(",", $groups);
         foreach ($groups as $group) {
-            $group = $conn->query("SELECT * FROM `groups` WHERE `id`='$group' LIMIT 1")->fetch_assoc();
+            $group = $conn->query("SELECT * FROM `{$dbp}groups` WHERE `id`='$group' LIMIT 1")->fetch_assoc();
             if (!empty($group["id"]) || ($group["status"] != 1 || $group["status"] != 3)) {
                 if ($group["permission"] == 0) {
                     $post = true;

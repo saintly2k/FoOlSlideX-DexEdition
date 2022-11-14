@@ -16,7 +16,7 @@ function config($name)
     // This function is used to get the value of a specific config-element
     require("config.php");
     require("conn.php");
-
+    $config = $conn->query("SELECT * FROM `{$dbp}config` ORDER BY `id` DESC");
     foreach ($config as $c) {
         if ($c["name"] == $name) {
             return $c["value"];
@@ -132,7 +132,7 @@ function getUser($uid)
     if ($uid == 0) {
         return "System";
     } else {
-        $u = $conn->query("SELECT * FROM `user` WHERE `id`='$uid' LIMIT 1")->fetch_assoc();
+        $u = $conn->query("SELECT * FROM `{$dbp}user` WHERE `id`='$uid' LIMIT 1")->fetch_assoc();
         if (empty($u["id"])) {
             return "Unknown";
         } else {
@@ -150,7 +150,7 @@ function getGroup($gid)
     require("config.php");
     require("conn.php");
     if (!empty($gid)) {
-        $g = $conn->query("SELECT * FROM `groups` WHERE `id`='$gid' LIMIT 1")->fetch_assoc();
+        $g = $conn->query("SELECT * FROM `{$dbp}groups` WHERE `id`='$gid' LIMIT 1")->fetch_assoc();
         if (empty($g["id"])) {
             return array(
                 "id" => 0,
@@ -265,7 +265,7 @@ function getBrowser()
         if (strripos($uAgent, "Version") < strripos($uAgent, $ub)) {
             $version = $matches['version'][0];
         } else {
-            $version = $matches['version'][1];
+            $version = $matches['version'][1] ?? "";
         }
     } else {
         $version = $matches['version'][0];
@@ -291,7 +291,7 @@ function logs($uid, $action, $before, $after)
         $ip = getIpAddress();
         $browserDetails = $browser["userAgent"];
         $browser = $browser["name"] . " " . $browser["version"] . ", " . ucfirst($browser["platform"]);
-        $conn->query("INSERT INTO `logs`(`user_id`,`action`,`before`,`after`,`ip`,`browser`,`browser_info`) VALUES('$uid','$action','$before','$after','$ip','$browser','$browserDetails')");
+        $conn->query("INSERT INTO `{$dbp}logs`(`user_id`,`action`,`before`,`after`,`ip`,`browser`,`browser_info`) VALUES('$uid','$action','$before','$after','$ip','$browser','$browserDetails')");
     }
 }
 
@@ -305,7 +305,7 @@ function getLastChData($tid)
 {
     require("config.php");
     require("conn.php");
-    $chapter = $conn->query("SELECT * FROM `chapters` WHERE `title_id`='$tid' ORDER BY `order` DESC LIMIT 1")->fetch_assoc();
+    $chapter = $conn->query("SELECT * FROM `{$dbp}chapters` WHERE `title_id`='$tid' ORDER BY `order` DESC LIMIT 1")->fetch_assoc();
     if (empty($chapter["id"])) {
         $chapter["id"] = "";
         $chapter["volume"] = "";
@@ -383,6 +383,44 @@ function convStringToArray($array)
         if (is_numeric($e)) {
             array_push($out, $e);
         }
+    }
+    return $out;
+}
+
+function uploadImage($imgTmp, $imgFile, $target, $uid)
+{
+    require("config.php");
+    require("conn.php");
+    $targetFile = $target;
+    $uploadOk = 1;
+    $imageFileType = $imgFile;
+
+    // Check if image file is a actual image or fake image
+    $check = getimagesize($imgTmp);
+    if ($check !== false) {
+        $uploadOk = 1;
+    } else {
+        $out = "An error occured - YOUR fault!";
+        logs($uid, "uploadImage", "Not Uploaded", "Error: Fake Image");
+        $uploadOk = 0;
+    }
+
+    // Allow certain file formats
+    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" && $imageFileType != "webp") {
+        $out = "Unsupported Image. Only JPG, JPEG, PNG, GIF and WEBP.";
+        $uploadOk = 0;
+        logs($uid, "uploadImage", "Not Uploaded", "Error: Unsupported Format");
+    }
+
+    // Check if $uploadOk is set to 0 by an error
+    if ($uploadOk == 1) {
+        // if (rename($imgTmp, $targetFile)) {
+            $out = "success";
+        //     logs($uid, "uploadImage", "Not Uploaded", "success");
+        // } else {
+        //     $out = "An error occured - server sided, you're not at fault (I think).";
+        //     logs($uid, "uploadImage", "Not Uploaded", "Error: Server Fault");
+        // }
     }
     return $out;
 }

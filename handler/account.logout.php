@@ -15,7 +15,7 @@ if ($loggedin == false) {
 // Removing token from Database and destroy entire session and so on
 logs($user["id"], "tryLogout", "Not Loggedout", "success");
 $token = clean(mysqli_real_escape_string($conn, $_COOKIE[config("cookie") . "_session"]));
-$conn->query("DELETE FROM `sessions` WHERE `token`='$token'");
+$conn->query("DELETE FROM `{$dbp}sessions` WHERE `token`='$token'");
 setcookie(config("cookie") . "_session", "", time() - 3600, "/", "");
 if (isset($_GET["redirect"])) {
     header("Location: " . config("url") . clean(mysqli_real_escape_string($conn, $_GET["redirect"])));

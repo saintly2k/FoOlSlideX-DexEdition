@@ -7,22 +7,21 @@ if (isset($_COOKIE[config("cookie") . "_session"]) && !empty($_COOKIE[config("co
     } else {
         $checking = clean(mysqli_real_escape_string($conn, $_SESSION[config("cookie") . "_session"]));
     }
-    $checking = $conn->query("SELECT * FROM `sessions` WHERE `token`='$checking'");
+    $checking = $conn->query("SELECT * FROM `{$dbp}sessions` WHERE `token`='$checking'");
     if (mysqli_num_rows($checking) == 1) {
         // Perform user-check of all data
         $user = mysqli_fetch_assoc($checking);
-        $user = $user["user"];
-        $user = $conn->query("SELECT * FROM `user` WHERE `id`='$user' LIMIT 1")->fetch_assoc();
+        $user = $conn->query("SELECT * FROM `{$dbp}user` WHERE `id`='" . $user["user"] . "' LIMIT 1")->fetch_assoc();
         $loggedin = true;
-        $userlevel = $conn->query("SELECT * FROM `levels` WHERE `level`='" . $user["level"] . "' LIMIT 1")->fetch_assoc();
+        $userlevel = $conn->query("SELECT * FROM `{$dbp}levels` WHERE `level`='" . $user["level"] . "' LIMIT 1")->fetch_assoc();
     } else {
         // Invalid session! (Hacking attempt or outdated? Who knows...)
         $loggedin = false;
-        $userlevel = $conn->query("SELECT * FROM `levels` WHERE `level`='" . config("guestlevel") . "' LIMIT 1")->fetch_assoc();
+        $userlevel = $conn->query("SELECT * FROM `{$dbp}levels` WHERE `level`='" . config("guestlevel") . "' LIMIT 1")->fetch_assoc();
     }
 } else {
     $loggedin = false;
-    $userlevel = $conn->query("SELECT * FROM `levels` WHERE `level`='" . config("guestlevel") . "' LIMIT 1")->fetch_assoc();
+    $userlevel = $conn->query("SELECT * FROM `{$dbp}levels` WHERE `level`='" . config("guestlevel") . "' LIMIT 1")->fetch_assoc();
 }
 
 if ($userlevel["banned"] == 1 && $loggedin == true && !isset($loggingout)) {

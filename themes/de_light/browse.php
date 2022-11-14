@@ -13,11 +13,11 @@ if ($orderBy == "released_asc") $order = "ORDER BY `release_year` ASC";
 if ($orderBy == "released_desc") $order = "ORDER BY `release_year` DESC";
 
 $results_per_page = 36;
-$result = $conn->query("SELECT * FROM `titles` $order");
+$result = $conn->query("SELECT * FROM `{$dbp}titles` $order");
 $number_of_result = mysqli_num_rows($result);
 $number_of_page = ceil($number_of_result / $results_per_page);
 $page_first_result = ($page - 1) * $results_per_page;
-$result = $conn->query("SELECT * FROM `titles` $order LIMIT " . $page_first_result . "," . $results_per_page);
+$result = $conn->query("SELECT * FROM `{$dbp}titles` $order LIMIT " . $page_first_result . "," . $results_per_page);
 
 ?>
 

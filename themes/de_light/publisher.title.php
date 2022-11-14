@@ -3,11 +3,11 @@
 require("../../load.php");
 
 $id = clean(mysqli_real_escape_string($conn, $_COOKIE[config("cookie") . "_currentTitle"]));
-$title = $conn->query("SELECT * FROM `titles` WHERE `id`='$id' LIMIT 1")->fetch_assoc();
+$title = $conn->query("SELECT * FROM `{$dbp}titles` WHERE `id`='$id' LIMIT 1")->fetch_assoc();
 
-$permission_upload = $conn->query("SELECT * FROM  `permissions_upload` WHERE `title_id`='$id' LIMIT 1")->fetch_assoc();
-$permission_modify = $conn->query("SELECT * FROM  `permissions_modify` WHERE `title_id`='$id' LIMIT 1")->fetch_assoc();
-$permission_edit = $conn->query("SELECT * FROM  `permissions_edit` WHERE `title_id`='$id' LIMIT 1")->fetch_assoc();
+$permission_upload = $conn->query("SELECT * FROM  `{$dbp}permissions_upload` WHERE `title_id`='$id' LIMIT 1")->fetch_assoc();
+$permission_modify = $conn->query("SELECT * FROM  `{$dbp}permissions_modify` WHERE `title_id`='$id' LIMIT 1")->fetch_assoc();
+$permission_edit = $conn->query("SELECT * FROM  `{$dbp}permissions_edit` WHERE `title_id`='$id' LIMIT 1")->fetch_assoc();
 $can_upload = $permission_upload["user_id"] == 0 || in_array($user["id"], explode(",", $permission_upload["user_id"])) ? true : false;
 $can_modify = $permission_modify["user_id"] == 0 || in_array($user["id"], explode(",", $permission_modify["user_id"])) ? true : false;
 $can_edit = $permission_edit["user_id"] == 0 || in_array($user["id"], explode(",", $permission_edit["user_id"])) ? true : false;

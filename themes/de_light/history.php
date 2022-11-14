@@ -85,7 +85,7 @@ if ($tab == "Titles") {
         <?php if (!empty($userhistoryp)) { ?>
             <div class="grid grid-cols-3 gap-2">
                 <?php foreach ($userhistoryp as $tid) { ?>
-                    <?php $title = $conn->query("SELECT * FROM `titles` WHERE `id`='$tid' LIMIT 1")->fetch_assoc(); ?>
+                    <?php $title = $conn->query("SELECT * FROM `{$dbp}titles` WHERE `id`='$tid' LIMIT 1")->fetch_assoc(); ?>
                     <?php $genre = explode(", ", $title["genre"]); ?>
                     <div class="col-span-1 grid grid-cols-3 gap-2">
                         <div class="col-span-1">
@@ -117,8 +117,8 @@ if ($tab == "Titles") {
     <?php } elseif ($tab == "Chapters") { ?>
         <?php if (!empty($userreadchaptersp)) { ?>
             <?php foreach ($userreadchaptersp as $cid) { ?>
-                <?php $ch = $conn->query("SELECT * FROM `chapters` WHERE `id`='$cid' LIMIT 1")->fetch_assoc(); ?>
-                <?php $tl = $conn->query("SELECT `id`, `title` FROM `titles` WHERE `id`='" . $ch["title_id"] . "' LIMIT 1")->fetch_assoc(); ?>
+                <?php $ch = $conn->query("SELECT * FROM `{$dbp}chapters` WHERE `id`='$cid' LIMIT 1")->fetch_assoc(); ?>
+                <?php $tl = $conn->query("SELECT `id`, `title` FROM `{$dbp}titles` WHERE `id`='" . $ch["title_id"] . "' LIMIT 1")->fetch_assoc(); ?>
                 <div class="col-span-3 border border-black p-1 grid grid-cols-8 hover:bg-gray-100">
                     <p class="col-span-2 font-bold">
                         <a href="<?= config("url") ?>title/<?= $tl["id"] ?>/<?= cat($tl["title"]) ?>" class="text-blue-700 hover:underline">

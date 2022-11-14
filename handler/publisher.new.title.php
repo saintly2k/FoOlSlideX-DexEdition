@@ -36,7 +36,7 @@ if (isset($_POST["addTitle"])) {
     if ($return == "success") {
         $return = tryCreateTitle($comic["title"], "jpeg", $comic["alt_names"], $comic["authors"], $comic["artists"], $comic["genres"], $comic["language"], $comic["original_work"], $comic["upload_status"], $comic["release_year"], $comic["complete_year"], $comic["summary"], $comic["notes"], $user["id"]);
         if ($return == "success") {
-            $title = $conn->query("SELECT * FROM `titles` ORDER BY `id` DESC LIMIT 1")->fetch_assoc();
+            $title = $conn->query("SELECT * FROM `{$dbp}titles` ORDER BY `id` DESC LIMIT 1")->fetch_assoc();
             $return = generatePermissions("all", $title["id"], "0", $user["id"]);
             if ($return == "success") {
                 $return = uploadImage($comic["cover"]["tmp"], $comic["cover"]["file"], "../data/covers/" . $title["id"] . ".jpeg", $user["id"]);

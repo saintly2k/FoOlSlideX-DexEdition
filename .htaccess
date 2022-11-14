@@ -34,3 +34,6 @@ RewriteRule ^error/?$ ./handler/error.php
 
 ErrorDocument 404 /handler/error.php
 ErrorDocument 403 /handler/error.php
+
+php_value post_max_size 50M
+php_value upload_max_filesize 50M

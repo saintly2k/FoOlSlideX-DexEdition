@@ -15,7 +15,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"]) || empty($_GET["id"])) {
     $error = true;
 } else {
     $id = clean(mysqli_real_escape_string($conn, $_GET["id"]));
-    $title = $conn->query("SELECT * FROM `titles` WHERE `id`='$id' LIMIT 1")->fetch_assoc();
+    $title = $conn->query("SELECT * FROM `{$dbp}titles` WHERE `id`='$id' LIMIT 1")->fetch_assoc();
     if (empty($title["id"])) {
         $error = true;
         $serror = true;
@@ -24,7 +24,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"]) || empty($_GET["id"])) {
 }
 
 if ($error == false) {
-    $permission_edit = $conn->query("SELECT * FROM  `permissions_edit` WHERE `title_id`='$id' LIMIT 1")->fetch_assoc();
+    $permission_edit = $conn->query("SELECT * FROM  `{$dbp}permissions_edit` WHERE `title_id`='$id' LIMIT 1")->fetch_assoc();
     if (empty($permission_edit["id"])) {
         generatePermissions("edit", $id, "0", $user["id"]);
         $generated = true;
@@ -62,8 +62,9 @@ if (isset($_POST["editTitle"])) {
         $return = tryEditTitle($title["id"], $comic["title"], $comic["alt_names"], $comic["authors"], $comic["artists"], $comic["genres"], $comic["language"], $comic["original_work"], $comic["upload_status"], $comic["release_year"], $comic["complete_year"], $comic["summary"], $comic["notes"], $user["id"]);
         if ($return == "success") {
             if (!empty($comic["cover"]["base"])) {
-                $return = uploadImage($comic["cover"]["tmp"], $comic["cover"]["file"], "../data/covers/" . $title["id"] . ".jpeg", $user["id"]);
+                $return = uploadImage($comic["cover"]["tmp"], $comic["cover"]["file"], "/data/covers/" . $title["id"] . ".jpeg", $user["id"]);
                 if ($return == "success") {
+                    move_uploaded_file($_FILES["cover"]["tmp_name"], "../data/covers/" . $title["id"] . ".jpeg");
                     header("Refresh: 0");
                     die("Let this page refresh you #*?!+>-2");
                 } else {

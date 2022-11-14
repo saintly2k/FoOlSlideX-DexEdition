@@ -36,15 +36,15 @@ function trySignup($email, $password)
 {
     require("../core/config.php");
     require("../core/conn.php");
-    $emailcheck = $conn->query("SELECT * FROM `user` WHERE `email`='$email' LIMIT 1")->fetch_assoc();
+    $emailcheck = $conn->query("SELECT * FROM `{$dbp}user` WHERE `email`='$email' LIMIT 1")->fetch_assoc();
     if (!empty($emailcheck["id"])) {
         $out = "Email already in use!";
         logs("0", "trySignup", "Not Created", "Error: Email");
     } else {
         $password = password_hash($password, PASSWORD_BCRYPT);
         $username = genUsername();
-        $conn->query("INSERT INTO `user`(`level`,`username`,`email`,`password`,`avatar`,`public`,`gender`,`biography`,`banned`,`banned_reason`) VALUES('" . config("defaultlevel") . "', '$username', '$email', '$password', 'png', '1', '0', NULL, '0', NULL)");
-        $c = $conn->query("SELECT * FROM `user` ORDER BY `id` DESC LIMIT 1")->fetch_assoc();
+        $conn->query("INSERT INTO `{$dbp}user`(`level`,`username`,`email`,`password`,`avatar`,`public`,`gender`,`biography`,`banned`,`banned_reason`) VALUES('" . config("defaultlevel") . "', '$username', '$email', '$password', 'png', '1', '0', NULL, '0', NULL)");
+        $c = $conn->query("SELECT * FROM `{$dbp}user` ORDER BY `id` DESC LIMIT 1")->fetch_assoc();
         $c = $c["id"];
         copy("../data/user/0.png", "../data/user/$c.png");
         $out = "success";
@@ -58,14 +58,14 @@ function tryLogin($email, $password)
     require("../core/config.php");
     require("../core/conn.php");
     $error = false;
-    $check = $conn->query("SELECT * FROM `user` WHERE `email`='$email' LIMIT 1");
+    $check = $conn->query("SELECT * FROM `{$dbp}user` WHERE `email`='$email' LIMIT 1");
     if (mysqli_num_rows($check) == 1 && $error == false) {
         // Account exists!
         $check = mysqli_fetch_assoc($check);
         $check = password_verify($password, $check["password"]);
         if ($check == true) {
             // Yay, user exists & passowrd matches!
-            $user = $conn->query("SELECT * FROM `user` WHERE `email`='$email' LIMIT 1")->fetch_assoc();
+            $user = $conn->query("SELECT * FROM `{$dbp}user` WHERE `email`='$email' LIMIT 1")->fetch_assoc();
             if ($user["banned"] == true) {
                 $error = true;
                 $out = "This account has been banned. Reason: " . $user["banned_reason"];
@@ -76,7 +76,7 @@ function tryLogin($email, $password)
                 $browser = getBrowser();
                 $browserDetails = $browser["userAgent"];
                 $browser = $browser["name"] . " " . $browser["version"] . ", " . ucfirst($browser["platform"]);
-                $conn->query("INSERT INTO `sessions`(`user`,`token`,`browser`,`browser_details`,`ip`) VALUES('" . $user["id"] . "','$token','$browser','$browserDetails','$ip')");
+                $conn->query("INSERT INTO `{$dbp}sessions`(`user`,`token`,`browser`,`browser_details`,`ip`) VALUES('" . $user["id"] . "','$token','$browser','$browserDetails','$ip')");
                 setcookie(config("cookie") . "_session", $token, time() + (10 * 365 * 24 * 60 * 60), "/");
                 $out = "success";
                 logs($user["id"], "tryLogin", "Not Loggedin", "success");
@@ -126,8 +126,8 @@ function tryEditProfile($uid, $username, $public, $gender, $biography)
 {
     require("../core/config.php");
     require("../core/conn.php");
-    $sql = "UPDATE `user` SET `username`='$username', `public`='$public', `gender`='$gender', `biography`='$biography' WHERE `id`='$uid'";
-    $user = $conn->query("SELECT * FROM `user` WHERE `id`='$uid' LIMIT 1")->fetch_assoc();
+    $sql = "UPDATE `{$dbp}user` SET `username`='$username', `public`='$public', `gender`='$gender', `biography`='$biography' WHERE `id`='$uid'";
+    $user = $conn->query("SELECT * FROM `{$dbp}user` WHERE `id`='$uid' LIMIT 1")->fetch_assoc();
     logs($uid, "tryEditProfileData", $user["username"] . "; " . $user["gender"] . "; " . $user["biography"], "$username; $gender; $biography;");
     if (!$conn->query($sql)) {
         $out = "MySQL Error: " . $conn->error;
@@ -143,7 +143,7 @@ function delSession($sid, $uid)
 {
     require("../core/config.php");
     require("../core/conn.php");
-    $conn->query("DELETE FROM `sessions` WHERE `id`='$sid' AND `user`='$uid'");
+    $conn->query("DELETE FROM `{$dbp}sessions` WHERE `id`='$sid' AND `user`='$uid'");
     logs($uid, "delSession", "Not Deleted", "success");
 }
 
@@ -191,15 +191,15 @@ function tryEditPassword($uid, $pwd)
     require("../core/config.php");
     require("../core/conn.php");
     $pwd = password_hash($pwd, PASSWORD_BCRYPT);
-    $sql = "UPDATE `user` SET `password`='$pwd' WHERE `id`='$uid'";
-    $user = $conn->query("SELECT * FROM `user` WHERE `id`='$uid' LIMIT 1")->fetch_assoc();
+    $sql = "UPDATE `{$dbp}user` SET `password`='$pwd' WHERE `id`='$uid'";
+    $user = $conn->query("SELECT * FROM `{$dbp}user` WHERE `id`='$uid' LIMIT 1")->fetch_assoc();
     logs($user["id"], "tryEditPasswordData", $user["password"], $pwd);
     setcookie(config("cookie") . "_session", "", time() - 3600, "/", "");
     if (!$conn->query($sql)) {
         $out = "MySQL Error: " . $conn->error;
         logs($user["id"], "tryEditPassword", "Not Edited", "Error: " . $conn->error);
     } else {
-        $sql = "DELETE FROM `sessions` WHERE `user`='$uid'";
+        $sql = "DELETE FROM `{$dbp}sessions` WHERE `user`='$uid'";
         if (!$conn->query($sql)) {
             $out = "MySQL Error: " . $conn->error;
             logs($user["id"], "tryEditPassword", "Session Not Deleted", "Error: " . $conn->error);

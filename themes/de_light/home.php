@@ -2,8 +2,8 @@
 
 require("../../load.php");
 
-$popular_titles = $conn->query("SELECT * FROM `titles` ORDER BY `id` DESC LIMIT " . config("home_display_titles"));
-$latest_chapters = $conn->query("SELECT * FROM `chapters` WHERE `awaiting_approval`=0 AND `deleted`=0 ORDER BY `id` DESC LIMIT " . config("home_display_chapters"));
+$popular_titles = $conn->query("SELECT * FROM `{$dbp}titles` ORDER BY `id` DESC LIMIT " . config("home_display_titles"));
+$latest_chapters = $conn->query("SELECT * FROM `{$dbp}chapters` WHERE `awaiting_approval`=0 AND `deleted`=0 ORDER BY `id` DESC LIMIT " . config("home_display_chapters"));
 
 ?>
 
@@ -25,8 +25,8 @@ $latest_chapters = $conn->query("SELECT * FROM `chapters` WHERE `awaiting_approv
     <h1 class="text-2xl border-b mb-1"><?= $lang["recent_chapters"] ?></h1>
     <div class="grid grid-cols-3 gap-2">
         <?php foreach ($latest_chapters as $chapter) { ?>
-            <?php $title = $conn->query("SELECT * FROM `titles` WHERE `id`='" . $chapter["title_id"] . "' LIMIT 1")->fetch_assoc(); ?>
-            <?php $lu = $conn->query("SELECT * FROM `user` WHERE `id`='" . $chapter["user_id"] . "' LIMIT 1")->fetch_assoc(); ?>
+            <?php $title = $conn->query("SELECT * FROM `{$dbp}titles` WHERE `id`='" . $chapter["title_id"] . "' LIMIT 1")->fetch_assoc(); ?>
+            <?php $lu = $conn->query("SELECT * FROM `{$dbp}user` WHERE `id`='" . $chapter["user_id"] . "' LIMIT 1")->fetch_assoc(); ?>
             <?php $genre = explode(", ", $title["genre"]); ?>
             <div class="col-span-1 grid grid-cols-3 gap-2">
                 <div class="col-span-1">

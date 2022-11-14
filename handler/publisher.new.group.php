@@ -40,7 +40,7 @@ if ($error == false && $userlevel["can_add_group"] == 1) {
         if ($return == "success") {
             $return = tryCreateGroup($group["name"], $group["description"], $group["upload_permissions"], $group["edit_permissions"], $group["status"], $group["owner"], $group["redirect"], $group["creator"], $userlevel["mod"], $user["id"]);
             if ($return == "success") {
-                $grp = $conn->query("SELECT * FROM `groups` ORDER BY `id` DESC LIMIT 1")->fetch_assoc();
+                $grp = $conn->query("SELECT * FROM `{$dbp}groups` ORDER BY `id` DESC LIMIT 1")->fetch_assoc();
                 if (!empty($group["banner"]["base"])) {
                     $return = uploadImage($group["banner"]["tmp"], $group["banner"]["file"], "../data/group/" . $grp["id"] . ".jpeg", $user["id"]);
                     if ($return == "success") {

@@ -50,7 +50,7 @@ function tryCreateGroup($name, $description, $uplperms, $editperms, $status, $ow
     $error = false;
     $out = "";
 
-    $check = $conn->query("SELECT * FROM `groups` WHERE `name`='$name' LIMIT 1")->fetch_assoc();
+    $check = $conn->query("SELECT * FROM `{$dbp}groups` WHERE `name`='$name' LIMIT 1")->fetch_assoc();
     if (!empty($check["id"])) {
         $error = true;
         $out = "A Group with that name already exists.";
@@ -70,7 +70,7 @@ function tryCreateGroup($name, $description, $uplperms, $editperms, $status, $ow
             $owner = "NULL";
             $redirect = "NULL";
         }
-        $sql = "INSERT INTO `groups`(`name`, `description`, `permission`, `modify`, `status`, `owner`, `redirect`, `creator`) VALUES ('$name',$description,$uplperms,$editperms,$status,$owner,$redirect,'$creator')";
+        $sql = "INSERT INTO `{$dbp}groups`(`name`, `description`, `permission`, `modify`, `status`, `owner`, `redirect`, `creator`) VALUES ('$name',$description,$uplperms,$editperms,$status,$owner,$redirect,'$creator')";
         if (!$conn->query($sql)) {
             $out = "MySQL Error: " . $conn->error;
             logs($uid, "tryCreateGroup", "Not Created", "Error: " . $conn->error);

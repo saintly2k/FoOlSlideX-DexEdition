@@ -15,7 +15,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"]) || empty($_GET["id"])) {
     $error = true;
 } else {
     $id = clean(mysqli_real_escape_string($conn, $_GET["id"]));
-    $title = $conn->query("SELECT * FROM `titles` WHERE `id`='$id' LIMIT 1")->fetch_assoc();
+    $title = $conn->query("SELECT * FROM `{$dbp}titles` WHERE `id`='$id' LIMIT 1")->fetch_assoc();
     if (empty($title["id"])) {
         $error = true;
         $serror = true;
@@ -58,7 +58,7 @@ if ($error == false && $userlevel["can_add_chapter"] == 1) {
                     $return = tryCreateChapter($title["id"], $user["id"], $chapter["order_number"], $chapter["volume_number"], $chapter["chapter_number"], $chapter["release_name"], $chapter["release_short_name"], $chapter["release_title"], $chapter["groups"], $cdata, $chapter["awaiting_approval"], $chapter["deleted"], $chapter["key"]);
                     if ($return == "success") {
                         if (!isset($_POST["stay"])) {
-                            $chapter = $conn->query("SELECT `id` FROM `chapters` ORDER BY `id` DESC LIMIT 1")->fetch_assoc();
+                            $chapter = $conn->query("SELECT `id` FROM `{$dbp}chapters` ORDER BY `id` DESC LIMIT 1")->fetch_assoc();
                             header("Location: " . config("url") . "chapter/" . $chapter["id"]);
                         }
                     } else {

@@ -1,43 +1,5 @@
 <?php
 
-function uploadImage($imgTmp, $imgFile, $target, $uid)
-{
-    require("../core/config.php");
-    require("../core/conn.php");
-    $targetFile = $target;
-    $uploadOk = 1;
-    $imageFileType = $imgFile;
-
-    // Check if image file is a actual image or fake image
-    $check = getimagesize($imgTmp);
-    if ($check !== false) {
-        $uploadOk = 1;
-    } else {
-        $out = "An error occured - YOUR fault!";
-        logs($uid, "uploadImage", "Not Uploaded", "Error: Fake Image");
-        $uploadOk = 0;
-    }
-
-    // Allow certain file formats
-    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" && $imageFileType != "webp") {
-        $out = "Unsupported Image. Only JPG, JPEG, PNG, GIF and WEBP.";
-        $uploadOk = 0;
-        logs($uid, "uploadImage", "Not Uploaded", "Error: Unsupported Format");
-    }
-
-    // Check if $uploadOk is set to 0 by an error
-    if ($uploadOk == 1) {
-        if (rename($imgTmp, $targetFile)) {
-            $out = "success";
-            logs($uid, "uploadImage", "Not Uploaded", "success");
-        } else {
-            $out = "An error occured - server sided, you're not at fault (I think).";
-            logs($uid, "uploadImage", "Not Uploaded", "Error: Server Fault");
-        }
-    }
-    return $out;
-}
-
 function checkTitleFormData($title, $cover, $alt, $authors, $artists, $language, $origwork, $uplstatus, $release, $complete, $type = "create")
 {
     $error = false;
@@ -121,7 +83,7 @@ function tryCreateTitle($title, $cover, $alt, $authors, $artists, $genre, $langu
     require("../core/conn.php");
     $release = empty($release) ? "NULL" : "'$release'";
     $complete = empty($complete) ? "NULL" : "'$complete'";
-    $sql = "INSERT INTO `titles`(`cover`, `title`, `alt_names`, `authors`, `artists`, `genre`, `original_language`, `original_work`, `upload_status`, `release_year`, `complete_year`, `summary`, `notes`, `user_id`)
+    $sql = "INSERT INTO `{$dbp}titles`(`cover`, `title`, `alt_names`, `authors`, `artists`, `genre`, `original_language`, `original_work`, `upload_status`, `release_year`, `complete_year`, `summary`, `notes`, `user_id`)
     VALUES ('$cover','$title','$alt','$authors','$artists','$genre','$language','$origwork','$uplstatus',$release,$complete,'$summary','$notes','$uid')";
     if (!$conn->query($sql)) {
         $out = "MySQL Error: " . $conn->error;
@@ -133,19 +95,21 @@ function tryCreateTitle($title, $cover, $alt, $authors, $artists, $genre, $langu
     return $out;
 }
 
-function tryEditTitle($tid, $title, $alt, $authors, $artists, $genre, $language, $origwork, $uplstatus, $release, $complete, $summary, $notes, $uid)
+function tryEditTitle($tid, $title2, $alt, $authors, $artists, $genre, $language, $origwork, $uplstatus, $release, $complete, $summary, $notes, $uid)
 {
     require("../core/config.php");
     require("../core/conn.php");
     $release = empty($release) ? "NULL" : "'$release'";
     $complete = empty($complete) ? "NULL" : "'$complete'";
-    $sql = "UPDATE `titles` SET `title`='$title',`alt_names`='$alt',`authors`='$authors',`artists`='$artists',`genre`='$genre',`original_language`='$language',`original_work`='$origwork',`upload_status`='$uplstatus',`release_year`=$release,`complete_year`=$complete,`summary`='$summary',`notes`='$notes' WHERE `id`='$tid'";
+    $sql = "UPDATE `{$dbp}titles` SET `title`='$title2',`alt_names`='$alt',`authors`='$authors',`artists`='$artists',`genre`='$genre',`original_language`='$language',`original_work`='$origwork',`upload_status`='$uplstatus',`release_year`=$release,`complete_year`=$complete,`summary`='$summary',`notes`='$notes' WHERE `id`='$tid'";
     if (config("logs") == 1) {
-        $title = $conn->query("SELECT * FROM `titles` WHERE `id`='$tid' LIMIT 1")->fetch_assoc();
+        $title = $conn->query("SELECT * FROM `{$dbp}titles` WHERE `id`='$tid' LIMIT 1")->fetch_assoc();
         $oldCover = "../data/old/covers/" . $title["id"] . ".jpeg";
-        $newCover = "../data/covers/" . $title["id"] . ".jpeg";
-        rename("../data/covers/" . $title["id"] . ".jpeg", $oldCover);
-        logs($uid, "tryEditTitleData", $title["title"] . "; " . $oldCover . "; " . $title["alt_names"] . "; " . $title["authors"] . "; " . $title["artists"] . "; " . $title["genre"] . "; " . $title["original_language"] . "; " . $title["original_work"] . "; " . $title["upload_status"] . "; " . $title["release_year"] . "; " . $title["complete_year"] . "; " . $title["summary"], $title . "; " . $newCover . "; " . $alt . "; " . $authors . "; " . $artists . "; " . $genre . "; " . $language . "; " . $origwork . "; " . $uplstatus . "; " . $release . "; " . $complete . "; " . $summary . "; " . $notes . ";");
+        $newCover = "/data/covers/" . $title["id"] . ".jpeg";
+        if (file_exists($oldCover)) {
+            rename("../data/covers/" . $title["id"] . ".jpeg", $oldCover);
+        }
+        logs($uid, "tryEditTitleData", $title["title"] . "; " . $oldCover . "; " . $title["alt_names"] . "; " . $title["authors"] . "; " . $title["artists"] . "; " . $title["genre"] . "; " . $title["original_language"] . "; " . $title["original_work"] . "; " . $title["upload_status"] . "; " . $title["release_year"] . "; " . $title["complete_year"] . "; " . $title["summary"], $title2 . "; " . $newCover . "; " . $alt . "; " . $authors . "; " . $artists . "; " . $genre . "; " . $language . "; " . $origwork . "; " . $uplstatus . "; " . $release . "; " . $complete . "; " . $summary . "; " . $notes . ";");
     }
     if (!$conn->query($sql)) {
         $out = "MySQL Error: " . $conn->error;
@@ -162,20 +126,20 @@ function generatePermissions($which, $title, $uid, $creator)
     require("../core/config.php");
     require("../core/conn.php");
     if ($which == "all") {
-        $conn->query("DELETE FROM `permissions_upload` WHERE `title_id`='$title'");
-        $sql = "INSERT INTO `permissions_upload`(`title_id`, `user_id`, `creator_id`) VALUES('$title','$uid','$creator')";
+        $conn->query("DELETE FROM `{$dbp}permissions_upload` WHERE `title_id`='$title'");
+        $sql = "INSERT INTO `{$dbp}permissions_upload`(`title_id`, `user_id`, `creator_id`) VALUES('$title','$uid','$creator')";
         if (!$conn->query($sql)) {
             $out = "MySQL Error: " . $conn->error;
             logs($uid, "generatePermissionsUpload", "Not Generated", "Error: " . $conn->error);
         } else {
-            $conn->query("DELETE FROM `permissions_modify` WHERE `title_id`='$title'");
-            $sql = "INSERT INTO `permissions_modify`(`title_id`, `user_id`, `creator_id`) VALUES('$title','$uid','$creator')";
+            $conn->query("DELETE FROM `{$dbp}permissions_modify` WHERE `title_id`='$title'");
+            $sql = "INSERT INTO `{$dbp}permissions_modify`(`title_id`, `user_id`, `creator_id`) VALUES('$title','$uid','$creator')";
             if (!$conn->query($sql)) {
                 $out = "MySQL Error: " . $conn->error;
                 logs($uid, "generatePermissionsModify", "Not Generated", "Error: " . $conn->error);
             } else {
-                $conn->query("DELETE FROM `permissions_edit` WHERE `title_id`='$title'");
-                $sql = "INSERT INTO `permissions_edit`(`title_id`, `user_id`, `creator_id`) VALUES('$title','$uid','$creator')";
+                $conn->query("DELETE FROM `{$dbp}permissions_edit` WHERE `title_id`='$title'");
+                $sql = "INSERT INTO `{$dbp}permissions_edit`(`title_id`, `user_id`, `creator_id`) VALUES('$title','$uid','$creator')";
                 if (!$conn->query($sql)) {
                     $out = "MySQL Error: " . $conn->error;
                     logs($uid, "generatePermissionsEdit", "Not Generated", "Error: " . $conn->error);
@@ -187,8 +151,8 @@ function generatePermissions($which, $title, $uid, $creator)
         }
     }
     if ($which == "upload") {
-        $conn->query("DELETE FROM `permissions_upload` WHERE `title_id`='$title'");
-        $sql = "INSERT INTO `permissions_upload`(`title_id`, `user_id`, `creator_id`) VALUES('$title','$uid','$creator')";
+        $conn->query("DELETE FROM `{$dbp}permissions_upload` WHERE `title_id`='$title'");
+        $sql = "INSERT INTO `{$dbp}permissions_upload`(`title_id`, `user_id`, `creator_id`) VALUES('$title','$uid','$creator')";
         if (!$conn->query($sql)) {
             $out = "MySQL Error: " . $conn->error;
             logs($uid, "generatePermissionsUpload", "Not Generated", "Error: " . $conn->error);
@@ -198,8 +162,8 @@ function generatePermissions($which, $title, $uid, $creator)
         }
     }
     if ($which == "modify") {
-        $conn->query("DELETE FROM `permissions_modify` WHERE `title_id`='$title'");
-        $sql = "INSERT INTO `permissions_modify`(`title_id`, `user_id`, `creator_id`) VALUES('$title','$uid','$creator')";
+        $conn->query("DELETE FROM `{$dbp}permissions_modify` WHERE `title_id`='$title'");
+        $sql = "INSERT INTO `{$dbp}permissions_modify`(`title_id`, `user_id`, `creator_id`) VALUES('$title','$uid','$creator')";
         if (!$conn->query($sql)) {
             $out = "MySQL Error: " . $conn->error;
             logs($uid, "generatePermissionsModify", "Not Generated", "Error: " . $conn->error);
@@ -209,8 +173,8 @@ function generatePermissions($which, $title, $uid, $creator)
         }
     }
     if ($which == "edit") {
-        $conn->query("DELETE FROM `permissions_edit` WHERE `title_id`='$title'");
-        $sql = "INSERT INTO `permissions_edit`(`title_id`, `user_id`, `creator_id`) VALUES('$title','$uid','$creator')";
+        $conn->query("DELETE FROM `{$dbp}permissions_edit` WHERE `title_id`='$title'");
+        $sql = "INSERT INTO `{$dbp}permissions_edit`(`title_id`, `user_id`, `creator_id`) VALUES('$title','$uid','$creator')";
         if (!$conn->query($sql)) {
             $out = "MySQL Error: " . $conn->error;
             logs($uid, "generatePermissionsEdit", "Not Generated", "Error: " . $conn->error);

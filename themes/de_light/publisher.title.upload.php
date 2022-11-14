@@ -74,7 +74,7 @@
 
         <div class="form-group mb-3">
             <label for="chapter_number" class="text-xl pl-5">Chapter Number <span class="text-gray-600">(Required)</span></label>
-            <input required type="number" step=".01" id="chapter_number" name="chapter_number" class="w-full" placeholder="Chapter Number" value="<?= isset($_POST["chapter_number"]) ? clean(mysqli_real_escape_string($conn, $_POST["chapter_number"]))+1 : $add["chapter_number"] ?>">
+            <input required type="number" step=".01" id="chapter_number" name="chapter_number" class="w-full" placeholder="Chapter Number" value="<?= isset($_POST["chapter_number"]) ? clean(mysqli_real_escape_string($conn, $_POST["chapter_number"])) + 1 : $add["chapter_number"] ?>">
             <p class="text-gray-500 leading-none">This is the chapter number. It can be a decimal.</p>
         </div>
         <div class="form-group mb-3">
@@ -99,7 +99,7 @@
         </div>
         <div class="form-group mb-3">
             <label for="release_title" class="text-xl pl-5">Release Title <span class="text-gray-600">(Optional)</span></label>
-            <input type="text" id="release_title" minlength="2" maxlength="15" name="release_title" class="w-full" placeholder="Release Title" value="<?= isset($_POST["release_title"]) ? clean(mysqli_real_escape_string($conn, $_POST["release_title"])) : $add["release_title"] ?>">
+            <input type="text" id="release_title" minlength="2" maxlength="200" name="release_title" class="w-full" placeholder="Release Title" value="<?= isset($_POST["release_title"]) ? clean(mysqli_real_escape_string($conn, $_POST["release_title"])) : $add["release_title"] ?>">
             <p class="text-gray-500 leading-none">This will be displayed after Release Name on the Title page. Needs to be between 2 and 200 Characters.</p>
         </div>
         <div class="form-group mb-3">

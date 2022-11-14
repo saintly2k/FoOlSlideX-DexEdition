@@ -17,9 +17,9 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"]) || empty($_GET["id"])) {
 }
 
 if ($error == false) {
-    $permission_upload = $conn->query("SELECT * FROM  `permissions_upload` WHERE `title_id`='$id' LIMIT 1")->fetch_assoc();
-    $permission_modify = $conn->query("SELECT * FROM  `permissions_modify` WHERE `title_id`='$id' LIMIT 1")->fetch_assoc();
-    $permission_edit = $conn->query("SELECT * FROM  `permissions_edit` WHERE `title_id`='$id' LIMIT 1")->fetch_assoc();
+    $permission_upload = $conn->query("SELECT * FROM  `{$dbp}permissions_upload` WHERE `title_id`='$id' LIMIT 1")->fetch_assoc();
+    $permission_modify = $conn->query("SELECT * FROM  `{$dbp}permissions_modify` WHERE `title_id`='$id' LIMIT 1")->fetch_assoc();
+    $permission_edit = $conn->query("SELECT * FROM  `{$dbp}permissions_edit` WHERE `title_id`='$id' LIMIT 1")->fetch_assoc();
     if (empty($permission_upload["id"])) {
         generatePermissions("upload", $id, "0", $user["id"]);
         $generated = true;

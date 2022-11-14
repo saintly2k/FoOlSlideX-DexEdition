@@ -50,7 +50,7 @@ if (isset($_POST["editProfile"])) {
 
 if (isset($_POST["deleteSession"])) {
     $sid = clean(mysqli_real_escape_string($conn, $_POST["sid"]));
-    $token = $conn->query("SELECT `token` FROM `sessions` WHERE `id`='$sid' AND `user`='" . $user["id"] . "' LIMIT 1")->fetch_assoc();
+    $token = $conn->query("SELECT `{$dbp}token` FROM `sessions` WHERE `id`='$sid' AND `user`='" . $user["id"] . "' LIMIT 1")->fetch_assoc();
     delSession($sid, $user["id"]);
     if ($token["token"] == clean(mysqli_real_escape_string($conn, $_COOKIE[config("cookie") . "_session"]))) {
         header("Location: " . config("url") . "account/login?redirect=account/sessions");

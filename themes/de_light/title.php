@@ -4,13 +4,13 @@ require("../../load.php");
 
 $error = false;
 $id = clean(mysqli_real_escape_string($conn, $_COOKIE[config("cookie") . "_currentTitle"]));
-$title = $conn->query("SELECT * FROM `titles` WHERE `id`='$id' LIMIT 1")->fetch_assoc();
+$title = $conn->query("SELECT * FROM `{$dbp}titles` WHERE `id`='$id' LIMIT 1")->fetch_assoc();
 if (!empty($title["id"])) {
     $authors = explode(", ", $title["authors"]);
     $artists = explode(", ", $title["artists"]);
     $genre = explode(", ", $title["genre"]);
-    $resources = $conn->query("SELECT * FROM `resources` WHERE `title_id`='$id' ORDER BY `name` ASC");
-    $chapters = $conn->query("SELECT * FROM `chapters` WHERE `title_id`='$id' ORDER BY `order` DESC");
+    $resources = $conn->query("SELECT * FROM `{$dbp}resources` WHERE `title_id`='$id' ORDER BY `name` ASC");
+    $chapters = $conn->query("SELECT * FROM `{$dbp}chapters` WHERE `title_id`='$id' ORDER BY `order` DESC");
 } else {
     $error = true;
 }

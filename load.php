@@ -15,7 +15,7 @@ if (config("debug") == 1) {
     ini_set('display_errors', 0);
 }
 
-if (in_array($_SERVER['HTTP_X_FORWARDED_FOR'], $banned_ips) || in_array($_SERVER['REMOTE_ADDR'], $banned_ips) || in_array($_SERVER["HTTP_CF_CONNECTING_IP"], $banned_ips)) die("You are banned because of abnormal behaviour (indicating you are maybe a Bot or someone with malicious intent). Please contact the administration if it's a bug.");
+if ((isset($_SERVER['HTTP_X_FORWARDED_FOR']) && in_array($_SERVER['HTTP_X_FORWARDED_FOR'], $banned_ips)) || (isset($_SERVER['REMOTE_ADDR']) && in_array($_SERVER['REMOTE_ADDR'], $banned_ips)) || (isset($_SERVER["HTTP_CF_CONNECTING_IP"]) && in_array($_SERVER["HTTP_CF_CONNECTING_IP"], $banned_ips))) die("You are banned because of abnormal behaviour (indicating you are maybe a Bot or someone with malicious intent). Please contact the administration if it's a bug.");
 
 // Get all Cookies, etc
 $usertheme = isset($_COOKIE[config("cookie") . "_theme"]) ? clean(mysqli_real_escape_string($conn, $_COOKIE[config("cookie") . "_theme"])) : config("default_theme");

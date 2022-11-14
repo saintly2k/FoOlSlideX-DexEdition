@@ -1,6 +1,6 @@
 <?php
 
-if ($tab == "sessions") $sessions = $conn->query("SELECT * FROM `sessions` WHERE `user`='" . $user["id"] . "' ORDER BY `id` DESC");
+if ($tab == "sessions") $sessions = $conn->query("SELECT * FROM `{$dbp}sessions` WHERE `user`='" . $user["id"] . "' ORDER BY `id` DESC");
 
 ?>
 
