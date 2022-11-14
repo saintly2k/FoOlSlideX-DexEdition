@@ -30,7 +30,7 @@ if ($error == false && $userlevel["can_add_group"] == 1) {
         } else {
             $group["upload_permissions"] = "";
             $group["edit_permissions"] = "";
-            $group["status"] = "";
+            $group["status"] = 0;
             $group["owner"] = "";
             $group["redirect"] = "";
         }
@@ -41,17 +41,20 @@ if ($error == false && $userlevel["can_add_group"] == 1) {
             $return = tryCreateGroup($group["name"], $group["description"], $group["upload_permissions"], $group["edit_permissions"], $group["status"], $group["owner"], $group["redirect"], $group["creator"], $userlevel["mod"], $user["id"]);
             if ($return == "success") {
                 $grp = $conn->query("SELECT * FROM `{$dbp}groups` ORDER BY `id` DESC LIMIT 1")->fetch_assoc();
-                if (!empty($group["banner"]["base"])) {
+                if (!empty($group["banner"]["base"]) && !empty($grp["id"])) {
                     $return = uploadImage($group["banner"]["tmp"], $group["banner"]["file"], "../data/group/" . $grp["id"] . ".jpeg", $user["id"]);
                     if ($return == "success") {
+                        move_uploaded_file($_FILES["banner"]["tmp_name"], "../data/group/" . $grp["id"] . ".jpeg");
                         header("Location: " . config("url") . "group/" . $grp["id"] . "/" . cat($grp["name"]));
                         $error = true;
                     } else {
                         $serror = true;
                     }
-                } else {
+                } elseif (!empty($grp["id"])) {
                     header("Location: " . config("url") . "group/" . $grp["id"] . "/" . cat($grp["name"]));
                     $error = true;
+                } else {
+                    $serror = true;
                 }
             }
         } else {

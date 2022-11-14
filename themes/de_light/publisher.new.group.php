@@ -26,7 +26,7 @@
     <form method="POST" name="addGroup" class="col-span-12 w-full" enctype="multipart/form-data">
         <div class="form-group mb-3">
             <label for="name" class="text-xl pl-5">Name <span class="text-gray-600">(Required)</span></label>
-            <input required type="text" minlength="5" maxlength="100" id="name" name="name" class="w-full" placeholder="Name of Group" value="<?= isset($_POST["name"]) ? clean(mysqli_real_escape_string($conn, $_POST["name"])) : "" ?>">
+            <input required type="text" minlength="4" maxlength="100" id="name" name="name" class="w-full" placeholder="Name of Group" value="<?= isset($_POST["name"]) ? clean(mysqli_real_escape_string($conn, $_POST["name"])) : "" ?>">
             <p class="text-gray-500 leading-none">This is the Name of the Group. It needs to be between 5 and 100 Characters. It may contain special Characters.</p>
         </div>
         <div class="form-group mb-3">

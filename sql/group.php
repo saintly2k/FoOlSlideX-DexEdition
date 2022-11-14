@@ -7,9 +7,9 @@ function checkGroupFormData($name, $uplperms, $editperms, $status, $owner, $redi
     $error = false;
     $out = "error";
     $nl = strlen($name);
-    if ($nl < 4 || $nl > 101) {
+    if ($nl < 3 || $nl > 101) {
         $error = true;
-        $out = "Name of Group needds to be between 10 and 100 characters.";
+        $out = "Name of Group needs to be between 10 and 100 characters.";
     }
     if ($mod == 1) {
         if (preg_match('#[^0-9,]#', $uplperms) == true && !empty($uplperms)) {
@@ -60,9 +60,9 @@ function tryCreateGroup($name, $description, $uplperms, $editperms, $status, $ow
         if ($mod == 1) {
             $uplperms = !empty($uplperms) ? "'" . $uplperms . "'" : "NULL";
             $editperms = !empty($editperms) ? "'" . $editperms . "'" : "NULL";
-            $status = !empty($status) ? "'" . $status . "'" : "NULL";
-            $owner = !empty($owner) ? "'" . $owner . "'" : "NULL";
-            $redirect = !empty($redirect) ? "'" . $redirect . "'" : "NULL";
+            $status = !empty($status) && is_numeric($status) ? $status : 0;
+            $owner = !empty($owner) && is_numeric($owner) ? "'" . $owner . "'" : "NULL";
+            $redirect = !empty($redirect) && is_numeric($redirect) ? "'" . $redirect . "'" : "NULL";
         } else {
             $uplperms = "NULL";
             $editperms = "NULL";
@@ -70,7 +70,7 @@ function tryCreateGroup($name, $description, $uplperms, $editperms, $status, $ow
             $owner = "NULL";
             $redirect = "NULL";
         }
-        $sql = "INSERT INTO `{$dbp}groups`(`name`, `description`, `permission`, `modify`, `status`, `owner`, `redirect`, `creator`) VALUES ('$name',$description,$uplperms,$editperms,$status,$owner,$redirect,'$creator')";
+        $sql = "INSERT INTO `{$dbp}groups`(`name`, `description`, `permission`, `modify`, `status`, `owner`, `redirect`, `creator`) VALUES ('$name',$description,$uplperms,$editperms,'$status',$owner,$redirect,'$creator')";
         if (!$conn->query($sql)) {
             $out = "MySQL Error: " . $conn->error;
             logs($uid, "tryCreateGroup", "Not Created", "Error: " . $conn->error);
