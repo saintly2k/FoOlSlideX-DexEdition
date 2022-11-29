@@ -4,6 +4,12 @@ function cloudSync($uid, $type, $method, $array = null)
 {
     require("../core/config.php");
     require("../core/conn.php");
+
+    $uid = stripNumbers($uid);
+    $type = clean($type);
+    $method = clean($method);
+    $array = clean($array);
+
     $out = "";
     $error = false;
     if (empty($uid) || empty($type) || empty($method)) $error = true;

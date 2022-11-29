@@ -7,6 +7,7 @@ require("core/funky.php");
 require("core/user.php");
 require("core/custom.php");
 
+// Debug mode
 if (config("debug") == 1) {
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
@@ -15,6 +16,8 @@ if (config("debug") == 1) {
     ini_set('display_errors', 0);
 }
 
+// Check if banned IP
+$banned_ips = getBans();
 if ((isset($_SERVER['HTTP_X_FORWARDED_FOR']) && in_array($_SERVER['HTTP_X_FORWARDED_FOR'], $banned_ips)) || (isset($_SERVER['REMOTE_ADDR']) && in_array($_SERVER['REMOTE_ADDR'], $banned_ips)) || (isset($_SERVER["HTTP_CF_CONNECTING_IP"]) && in_array($_SERVER["HTTP_CF_CONNECTING_IP"], $banned_ips))) die("You are banned because of abnormal behaviour (indicating you are maybe a Bot or someone with malicious intent). Please contact the administration if it's a bug.");
 
 // Get all Cookies, etc

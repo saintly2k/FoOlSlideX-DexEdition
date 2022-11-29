@@ -27,7 +27,7 @@ if ($_GET["tab"] != "home" && $_GET["tab"] != "profile" && $_GET["tab"] != "avat
 
 if (isset($_POST["editProfile"])) {
     $uid = $user["id"];
-    $username = cat(clean(mysqli_real_escape_string($conn, $_POST["username"])), "username");
+    $username = clean(mysqli_real_escape_string($conn, $_POST["username"]));
     $public = clean(mysqli_real_escape_string($conn, $_POST["public"]));
     $gender = clean(mysqli_real_escape_string($conn, $_POST["gender"]));
     $biography = clean(mysqli_real_escape_string($conn, $_POST["biography"]));
@@ -39,7 +39,7 @@ if (isset($_POST["editProfile"])) {
             $user["username"] = $username;
             $user["public"] = $public;
             $user["gender"] = $gender;
-            $user["biography"] = $biography;
+            $user["biography"] = clean($biography);
         } else {
             $serror = true;
         }

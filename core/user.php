@@ -24,8 +24,7 @@ if (isset($_COOKIE[config("cookie") . "_session"]) && !empty($_COOKIE[config("co
     $userlevel = $conn->query("SELECT * FROM `{$dbp}levels` WHERE `level`='" . config("guestlevel") . "' LIMIT 1")->fetch_assoc();
 }
 
-if ($userlevel["banned"] == 1 && $loggedin == true && !isset($loggingout)) {
-    echo "You're banned. Don't ignore headers you idiot.";
+if (($userlevel["banned"] == 1 && $loggedin == true) || (isset($user["id"]) && $user["banned"] == 1 && $loggedin == true) && !isset($loggingout)) {
     header("Location: " . config("url") . "account/logout");
     die("You're banned. Don't ignore headers you idiot.");
 }

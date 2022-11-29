@@ -36,6 +36,10 @@ function trySignup($email, $password)
 {
     require("../core/config.php");
     require("../core/conn.php");
+
+    $email = clean($email);
+    $password = clean($password);
+
     $emailcheck = $conn->query("SELECT * FROM `{$dbp}user` WHERE `email`='$email' LIMIT 1")->fetch_assoc();
     if (!empty($emailcheck["id"])) {
         $out = "Email already in use!";
@@ -57,6 +61,10 @@ function tryLogin($email, $password)
 {
     require("../core/config.php");
     require("../core/conn.php");
+
+    $email = clean($email);
+    $password = clean($password);
+
     $error = false;
     $check = $conn->query("SELECT * FROM `{$dbp}user` WHERE `email`='$email' LIMIT 1");
     if (mysqli_num_rows($check) == 1 && $error == false) {
@@ -126,6 +134,13 @@ function tryEditProfile($uid, $username, $public, $gender, $biography)
 {
     require("../core/config.php");
     require("../core/conn.php");
+
+    $uid = stripNumbers($uid);
+    $username = clean($username);
+    $public = stripNumbers($public);
+    $gender = stripNumbers($gender);
+    $biography = clean($biography);
+
     $sql = "UPDATE `{$dbp}user` SET `username`='$username', `public`='$public', `gender`='$gender', `biography`='$biography' WHERE `id`='$uid'";
     $user = $conn->query("SELECT * FROM `{$dbp}user` WHERE `id`='$uid' LIMIT 1")->fetch_assoc();
     logs($uid, "tryEditProfileData", $user["username"] . "; " . $user["gender"] . "; " . $user["biography"], "$username; $gender; $biography;");
@@ -190,6 +205,10 @@ function tryEditPassword($uid, $pwd)
 {
     require("../core/config.php");
     require("../core/conn.php");
+
+    $uid = stripNumbers($uid);
+    $password = clean($password);
+
     $pwd = password_hash($pwd, PASSWORD_BCRYPT);
     $sql = "UPDATE `{$dbp}user` SET `password`='$pwd' WHERE `id`='$uid'";
     $user = $conn->query("SELECT * FROM `{$dbp}user` WHERE `id`='$uid' LIMIT 1")->fetch_assoc();

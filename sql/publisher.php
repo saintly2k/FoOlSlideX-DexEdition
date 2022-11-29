@@ -81,6 +81,22 @@ function tryCreateTitle($title, $cover, $alt, $authors, $artists, $genre, $langu
 {
     require("../core/config.php");
     require("../core/conn.php");
+
+    $title = clean($title);
+    $cover = clean($cover);
+    $alt = clean($alt);
+    $authors = clean($authors);
+    $artists = clean($artists);
+    $genre = clean($genre);
+    $language = clean($language);
+    $origwork = stripNumbers($origwork);
+    $uplstatus = stripNumbers($uplstatus);
+    $release = stripNumbers($release);
+    $complete = stripNumbers($complete);
+    $summary = clean($summary);
+    $notes = clean($notes);
+    $uid = stripNumbers($uid);
+
     $release = empty($release) ? "NULL" : "'$release'";
     $complete = empty($complete) ? "NULL" : "'$complete'";
     $sql = "INSERT INTO `{$dbp}titles`(`cover`, `title`, `alt_names`, `authors`, `artists`, `genre`, `original_language`, `original_work`, `upload_status`, `release_year`, `complete_year`, `summary`, `notes`, `user_id`)
@@ -99,6 +115,22 @@ function tryEditTitle($tid, $title2, $alt, $authors, $artists, $genre, $language
 {
     require("../core/config.php");
     require("../core/conn.php");
+
+    $tid = stripNumbers($tid);
+    $title2 = clean($title2);
+    $alt = clean($alt);
+    $authors = clean($authors);
+    $artists = clean($artists);
+    $genre = clean($genre);
+    $language = clean($language);
+    $origwork = stripNumbers($origwork);
+    $uplstatus = stripNumbers($uplstatus);
+    $release = stripNumbers($release);
+    $complete = stripNumbers($complete);
+    $summary = clean($summary);
+    $notes = clean($notes);
+    $uid = stripNumbers($uid);
+
     $release = empty($release) ? "NULL" : "'$release'";
     $complete = empty($complete) ? "NULL" : "'$complete'";
     $sql = "UPDATE `{$dbp}titles` SET `title`='$title2',`alt_names`='$alt',`authors`='$authors',`artists`='$artists',`genre`='$genre',`original_language`='$language',`original_work`='$origwork',`upload_status`='$uplstatus',`release_year`=$release,`complete_year`=$complete,`summary`='$summary',`notes`='$notes' WHERE `id`='$tid'";
@@ -125,6 +157,12 @@ function generatePermissions($which, $title, $uid, $creator)
 {
     require("../core/config.php");
     require("../core/conn.php");
+
+    $which = clean($which);
+    $title = stripNumbers($title);
+    $uid = stripNumbers($uid);
+    $creator = stripNumbers($creator);
+
     if ($which == "all") {
         $conn->query("DELETE FROM `{$dbp}permissions_upload` WHERE `title_id`='$title'");
         $sql = "INSERT INTO `{$dbp}permissions_upload`(`title_id`, `user_id`, `creator_id`) VALUES('$title','$uid','$creator')";

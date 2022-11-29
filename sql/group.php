@@ -47,9 +47,18 @@ function tryCreateGroup($name, $description, $uplperms, $editperms, $status, $ow
 {
     require("../core/config.php");
     require("../core/conn.php");
+
+    $name = clean($name);
+    $description = clean($description);
+    $status = stripNumbers($status);
+    $owner = stripNumbers($owner);
+    $redirect = stripNumbers($redirect);
+    $creator = stripNumbers($creator);
+    $mod = clean($mod);
+    $uid = stripNumbers($uid);
+
     $error = false;
     $out = "";
-
     $check = $conn->query("SELECT * FROM `{$dbp}groups` WHERE `name`='$name' LIMIT 1")->fetch_assoc();
     if (!empty($check["id"])) {
         $error = true;

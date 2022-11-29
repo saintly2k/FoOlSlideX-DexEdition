@@ -137,7 +137,7 @@ if ($error == false) {
     </div>
 
     <div class="col-span-12 mb-2 text-center">
-        <a href="<?= config("url") ?>publisher/title/<?= $title["id"] ?>/<?= cat($title["title"]) ?>">
+        <a href="<?= config("url") ?>publisher/title/<?= $title["id"] ?>/<?= cat($title["title"]) ?>" target="_blank">
             <div class="bg-blue-500 hover:bg-blue-800 w-full p-1 text-white border border-black shadow-xl">
                 Open and Manage in Publisher
             </div>

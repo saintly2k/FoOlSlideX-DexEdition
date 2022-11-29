@@ -24,6 +24,52 @@ function config($name)
     }
 }
 
+function namba($data)
+{
+    return preg_replace("/[^a-z0-9.:]/i", "", $data);
+}
+
+function getBans()
+{
+    if (!file_exists(__DIR__ . "/bans.txt")) fopen(__DIR__ . "/bans.txt", "w");
+    return explode(",", file_get_contents(__DIR__ . "/bans.txt"));
+}
+
+function formatBans()
+{
+    $bans = getBans();
+    $file = fopen(__DIR__ . "/bans.txt", "w+");
+    $x = 1;
+    foreach ($bans as $b) {
+        if ($x != 1) fwrite($file, ",\n");
+        fwrite($file, namba($b));
+        $x++;
+    }
+    fclose($file);
+}
+
+function addBan($ip)
+{
+    $bans = file_get_contents(__DIR__ . "/bans.txt");
+    $bans .= "," . $ip;
+    file_put_contents(__DIR__ . "/bans.txt", $bans);
+    formatBans();
+}
+
+function banUser($uid, $ip, $reason = null)
+{
+    // Function to ban people from db and add ip to file
+    require("config.php");
+    require("conn.php");
+
+    $uid = stripNumbers($uid);
+    $reason = clean($reason);
+
+    $conn->query("UPDATE `{$dbp}user` SET `banned`='1', `banned_reason`='$reason' WHERE `id`='$uid'");
+    addBan($ip);
+    formatBans();
+}
+
 function callFile($file)
 {
     return "<script>function loadContent() {
@@ -336,6 +382,11 @@ function getLastChData($tid)
     );
 }
 
+function stripNumbers($input)
+{
+    return preg_replace('/[^0-9]/', '', json_encode($input));
+}
+
 function gen_uuid()
 {
     return sprintf(
@@ -387,13 +438,12 @@ function convStringToArray($array)
     return $out;
 }
 
-function uploadImage($imgTmp, $imgFile, $target, $uid)
+function uploadImage($imgTmp, $imgFile, $uid)
 {
     require("config.php");
     require("conn.php");
-    $targetFile = $target;
     $uploadOk = 1;
-    $imageFileType = $imgFile;
+    $out = "";
 
     // Check if image file is a actual image or fake image
     $check = getimagesize($imgTmp);
@@ -402,11 +452,13 @@ function uploadImage($imgTmp, $imgFile, $target, $uid)
     } else {
         $out = "An error occured - YOUR fault!";
         logs($uid, "uploadImage", "Not Uploaded", "Error: Fake Image");
+        addBan(getIpAddress());
+        banUser($uid, "Attempted Hacking (Upload: Fake image)");
         $uploadOk = 0;
     }
 
     // Allow certain file formats
-    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" && $imageFileType != "webp") {
+    if ($imgFile != "jpg" && $imgFile != "png" && $imgFile != "jpeg" && $imgFile != "gif" && $imgFile != "webp") {
         $out = "Unsupported Image. Only JPG, JPEG, PNG, GIF and WEBP.";
         $uploadOk = 0;
         logs($uid, "uploadImage", "Not Uploaded", "Error: Unsupported Format");
@@ -414,13 +466,10 @@ function uploadImage($imgTmp, $imgFile, $target, $uid)
 
     // Check if $uploadOk is set to 0 by an error
     if ($uploadOk == 1) {
-        // if (rename($imgTmp, $targetFile)) {
         $out = "success";
-        //     logs($uid, "uploadImage", "Not Uploaded", "success");
-        // } else {
-        //     $out = "An error occured - server sided, you're not at fault (I think).";
-        //     logs($uid, "uploadImage", "Not Uploaded", "Error: Server Fault");
-        // }
+        logs($uid, "uploadImage", "Not Uploaded", "success");
+    } else {
+        logs($uid, "uploadImage", "Not Uploaded", "Error: Server Fault");
     }
     return $out;
 }

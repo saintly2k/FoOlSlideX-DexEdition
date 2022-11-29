@@ -12,8 +12,9 @@ function rmrf($dir)
     }
 }
 
-function unzip($file, $tmp, $target)
+function unzip($file, $tmp, $target, $uid)
 {
+    $error = false;
     $zip = new ZipArchive;
     $res = $zip->open($file);
     if ($res === true) {
@@ -26,21 +27,35 @@ function unzip($file, $tmp, $target)
         $zip->extractTo($tmp);
         $files = glob("$tmp/*.{jpg,jpeg,webp,gif,png}", GLOB_BRACE);
         if (!empty($files)) {
-            sort($files, SORT_STRING);
-            $c = 1;
-            foreach ($files as $file) {
-                rename($file, $target . "/$c.jpeg");
-                $c++;
+            foreach ($files as $f) {
+                $check = getimagesize($f);
+                if ($check == false) {
+                    $out = "An error occured - YOUR fault!";
+                    banUser($uid, getIpAddress(), "Attempted Hacking (Upload: Fake image)");
+                    logs($uid, "uploadChapter", "Not Uploaded", "Error: Includes Fake Image");
+                    $error = true;
+                    rmrf($tmp);
+                }
             }
-            $zip->close();
-            rmrf($tmp);
-            $out = "success";
+            if ($error == false) {
+                sort($files, SORT_STRING);
+                $c = 1;
+                foreach ($files as $file) {
+                    rename($file, $target . "/$c.jpeg");
+                    $c++;
+                }
+                $zip->close();
+                rmrf($tmp);
+                $out = "success";
+                logs($uid, "uploadChapter", "Not Uploaded", "success");
+            }
         } else {
             $out = "No Images found. Maybe you zipped them wrong.";
         }
     } else {
         $out = "error";
     }
+    unlink($file);
     return $out;
 }
 
@@ -92,6 +107,20 @@ function tryCreateChapter($tid, $uid, $order, $volume, $chapter, $name, $short, 
 {
     require("../core/config.php");
     require("../core/conn.php");
+
+    $tid = stripNumbers($tid);
+    $uid = stripNumbers($uid);
+    $order = clean($order);
+    $volume = stripNumbers($volume);
+    $chapter = clean($chapter);
+    $name = clean($name);
+    $short = clean($short);
+    $title = clean($title);
+    $groups = clean($groups);
+    $awaiting = clean($awaiting);
+    $deleted = stripNumbers($deleted);
+    $key = clean($key);
+
     $out = "";
     $sql = "INSERT INTO `{$dbp}chapters`(`title_id`, `user_id`, `order`, `volume`, `chapter`, `release_name`, `release_short`, `title`, `groups`, `data_path`, `awaiting_approval`, `deleted`, `key`)
     VALUES ('$tid','$uid','$order','$volume','$chapter','$name','$short','$title','$groups','$data','$awaiting','$deleted','$key')";
@@ -109,6 +138,11 @@ function verifyGroups($groups, $uid, $mod)
 {
     require("../core/config.php");
     require("../core/conn.php");
+
+    $groups = clean($groups);
+    $uid = stripNumbers($uid);
+    $mod = clean($mod);
+
     $out = "";
     $c = 1;
     if (!empty($groups)) {

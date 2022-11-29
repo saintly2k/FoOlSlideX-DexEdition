@@ -52,7 +52,7 @@ if ($error == false && $userlevel["can_add_chapter"] == 1) {
             $return = checkAddChapterData($chapter["chapter_number"], $chapter["volume_number"], $chapter["order_number"], $chapter["release_name"], $chapter["release_short_name"], $chapter["release_title"]);
             if ($return == "success") {
                 $cdata = gen_uuid();
-                $return = unzip($chapter["archive"]["tmp"], "../data/chapters/tmp", "../data/chapters/$cdata");
+                $return = unzip($chapter["archive"]["tmp"], "../data/chapters/tmp", "../data/chapters/$cdata", $user["id"]);
                 if ($return == "success") {
                     if (empty($chapter["order_number"])) $chapter["order_number"] = $chapter["chapter_number"];
                     $return = tryCreateChapter($title["id"], $user["id"], $chapter["order_number"], $chapter["volume_number"], $chapter["chapter_number"], $chapter["release_name"], $chapter["release_short_name"], $chapter["release_title"], $chapter["groups"], $cdata, $chapter["awaiting_approval"], $chapter["deleted"], $chapter["key"]);
