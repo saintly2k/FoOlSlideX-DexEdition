@@ -8,7 +8,6 @@ function cloudSync($uid, $type, $method, $array = null)
     $uid = stripNumbers($uid);
     $type = clean($type);
     $method = clean($method);
-    $array = clean($array);
 
     $out = "";
     $error = false;
